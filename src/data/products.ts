@@ -107,11 +107,13 @@ export const announcement = "BACK TO SCHOOL SALE — UP TO 45% OFF · FREE DELIV
 
 /** Store contact details used in the footer. */
 export const store = {
-  name: "TBH Thrift",
-  phone: "+92 300 000 0000",
-  whatsapp: "+92 300 000 0000",
-  email: "hello@tbhthrift.pk",
-  address: "Shop 12, Main Boulevard, Lahore",
+  name: "Thrift by Hasni",
+  phone: "0334 0801640",
+  whatsapp: "+92 334 0801640",
+  email: "hello@thriftbyhasni.pk",
+  address: "VWVC+M5, Mohra Kor Chisham, near Chakwal–Jhelum Rd, Pakistan",
+  hours: "Open daily · closes 8:00 PM",
+  mapsUrl: "https://maps.google.com/?q=VWVC%2BM5+Mohra+Kor+Chisham+Pakistan",
   instagram: "https://instagram.com",
 };
 
