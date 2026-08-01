@@ -103,7 +103,7 @@ export const products: Product[] = [
     category: "Sports",
     price: 1999,
     oldPrice: 3000,
-    condition: "Very Good",
+    condition: "Premium+",
     sizes: ["5 UK", "7 US", "38 EUR"],
     image: shoes5.url,
   },
