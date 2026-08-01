@@ -110,6 +110,10 @@
 }
 
 .dark {
+  --brand: oklch(0.35 0.1 268);
+  --brand-foreground: oklch(0.99 0.003 90);
+  --highlight: oklch(0.92 0.19 105);
+  --highlight-foreground: oklch(0.22 0.06 268);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -152,5 +156,10 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
   }
 }
