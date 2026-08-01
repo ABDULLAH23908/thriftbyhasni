@@ -38,6 +38,9 @@ export function SiteHeader() {
             >
               Kids
             </Link>
+            <Link to="/reviews" className="opacity-80 transition-opacity hover:opacity-100">
+              Reviews
+            </Link>
           </nav>
           <a
             href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
