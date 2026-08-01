@@ -5,7 +5,7 @@
  * To add a product: copy one block below, paste it, change the values.
  *
  *  image  -> use one of the imported photos at the top, or paste a URL
- *             in quotes, e.g. image: "https://example.com/shoe.jpg"
+ *             in quotes, e.g. image: "https://example.shoe.jpg"
  *  price  -> number in PKR (no commas)
  *  oldPrice -> optional, shows a crossed-out price
  *  condition -> "Premium+" | "Premium" | "Excellence" | "Very Good"
