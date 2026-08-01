@@ -135,6 +135,6 @@ export const brands = [
   "Asics",
   "Skechers",
   "Saucony",
-  "Under Armour",
-  "Brooks",
+  "",
+  "",
 ];
