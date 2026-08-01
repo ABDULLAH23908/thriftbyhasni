@@ -56,7 +56,7 @@ function FilterRow({
       <div className="mt-2 flex flex-wrap gap-2">
         <Link
           to="/shop"
-          search={(prev) => ({ ...prev, [keyName]: undefined })}
+          search={(prev: ShopSearch) => ({ ...prev, [keyName]: undefined })}
           className={`border px-4 py-2 text-[11px] font-bold uppercase tracking-widest ${
             active ? "border-border" : "border-brand bg-brand text-brand-foreground"
           }`}
@@ -67,7 +67,7 @@ function FilterRow({
           <Link
             key={v}
             to="/shop"
-            search={(prev) => ({ ...prev, [keyName]: v })}
+            search={(prev: ShopSearch) => ({ ...prev, [keyName]: v })}
             className={`border px-4 py-2 text-[11px] font-bold uppercase tracking-widest ${
               active === v ? "border-brand bg-brand text-brand-foreground" : "border-border"
             }`}
