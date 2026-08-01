@@ -148,6 +148,17 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* Completely hide the "Edit with Lovable" tagger button globally */
+#lovable-badge,
+[id*="lovable"],
+[class*="lovable"],
+div[style*="z-index: 999999"],
+a[href*="lovable.dev"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
