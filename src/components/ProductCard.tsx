@@ -45,7 +45,7 @@ export function ProductCard({ product }: { product: Product }) {
             {product.name}
           </h3>
         </Link>
-        <p className="mt-1 text-xs text-muted-foreground">UK {product.sizes.join(" · ")}</p>
+        <p className="mt-1 text-xs text-muted-foreground"> {product.sizes.join(" · ")}</p>
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-lg font-bold">PKR {product.price.toLocaleString()}</span>
           {product.oldPrice && (
