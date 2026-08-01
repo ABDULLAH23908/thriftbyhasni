@@ -1,0 +1,50 @@
+import logo from "@/assets/logo.png.asset.json";
+import { store, brands } from "@/data/products";
+
+export function SiteFooter() {
+  return (
+    <footer className="bg-highlight text-highlight-foreground">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <img src={logo.url} alt={`${store.name} logo`} className="h-8 w-auto" />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed">
+            Hand-picked thrifted sneakers, graded honestly and priced fairly. One pair, one owner,
+            one price.
+          </p>
+        </div>
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em]">Get in touch</h3>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>{store.address}</li>
+            <li>{store.phone}</li>
+            <li>{store.email}</li>
+          </ul>
+        </div>
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em]">Brands we stock</h3>
+          <ul className="mt-4 space-y-2 text-sm">
+            {brands.slice(0, 5).map((b) => (
+              <li key={b}>{b}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em]">Support</h3>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>Sizing &amp; fit guide</li>
+            <li>Shipping across Pakistan</li>
+            <li>7-day exchange policy</li>
+            <li>
+              <a href={store.instagram} target="_blank" rel="noreferrer" className="underline">
+                Instagram
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-highlight-foreground/15 py-5 text-center text-xs">
+        © {new Date().getFullYear()} {store.name}. All rights reserved.
+      </div>
+    </footer>
+  );
+}
