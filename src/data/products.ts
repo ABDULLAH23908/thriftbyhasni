@@ -42,7 +42,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Men",
     price: 2499,
-    oldPrice: 4000,
+    oldPrice: 3499,
     condition: "Premium+",
     sizes: ["7", "8", "9", "10"],
     image: shoes1.url,
