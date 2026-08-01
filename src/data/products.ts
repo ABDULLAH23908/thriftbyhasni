@@ -128,7 +128,7 @@ export const store = {
   address: "VWVC+M5, Mohra Kor Chisham, near Chakwal–Jhelum Rd, Pakistan",
   hours: "Open daily · closes 8:00 PM",
   mapsUrl: "https://maps.google.com/?q=VWVC%2BM5+Mohra+Kor+Chisham+Pakistan",
-  instagram: "https://instagram.com",
+  instagram: "https://www.instagram.com/thrift_by_hasni1/",
 };
 
 /** Condition guide shown on the homepage. */
