@@ -19,37 +19,52 @@ export function ProductImageZoom({
   const [bgPos, setBgPos] = useState({ x: 0, y: 0 });
   const [bgSize, setBgSize] = useState({ w: 0, h: 0 });
 
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+  function updatePosition(clientX: number, clientY: number) {
     const el = containerRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
     // Keep the lens fully inside the image bounds
     const clampedX = Math.min(Math.max(x, lensSize / 2), rect.width - lensSize / 2);
     const clampedY = Math.min(Math.max(y, lensSize / 2), rect.height - lensSize / 2);
     setLensPos({ x: clampedX, y: clampedY });
 
-    // Background is the image scaled up by zoomFactor, relative to its
-    // real displayed size — this is what actually makes it look zoomed IN.
     setBgSize({ w: rect.width * zoomFactor, h: rect.height * zoomFactor });
 
-    // Offset the background so the point under the cursor lands in the
-    // center of the lens.
     const bgX = -(x * zoomFactor - lensSize / 2);
     const bgY = -(y * zoomFactor - lensSize / 2);
     setBgPos({ x: bgX, y: bgY });
   }
 
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    setShowLens(true);
+    updatePosition(e.clientX, e.clientY);
+  }
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!showLens && e.pointerType === "mouse") {
+      setShowLens(true);
+    }
+    if (showLens || e.pointerType === "mouse") {
+      updatePosition(e.clientX, e.clientY);
+    }
+  }
+
+  function handlePointerLeave() {
+    setShowLens(false);
+  }
+
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden cursor-crosshair select-none"
-      onMouseEnter={() => setShowLens(true)}
-      onMouseLeave={() => setShowLens(false)}
-      onMouseMove={handleMouseMove}
+      className="relative w-full h-full overflow-hidden cursor-crosshair select-none touch-none"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      onPointerUp={handlePointerLeave}
     >
       <img
         src={src}
