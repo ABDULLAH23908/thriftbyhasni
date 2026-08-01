@@ -64,6 +64,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Women",
     price: 1999,
+    oldPrice: 3000,
     condition: "Premium",
     sizes: ["6.5 US", "39 EUR"],
     image: shoes3.url,
@@ -74,7 +75,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Casual",
     price: 1999,
-    oldPrice: 14000,
+    oldPrice: 3000,
     condition: "Excellence",
     sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes4.url,
@@ -85,6 +86,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Sports",
     price: 1999,
+    oldPrice: 3000,
     condition: "Very Good",
     sizes: ["5 UK", "7 US", "38 EUR"],
     image: shoes5.url,
@@ -95,7 +97,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Kids",
     price: 1999,
-    oldPrice: 11500,
+    oldPrice: 3000,
     condition: "Premium",
     sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes6.url,
@@ -103,7 +105,7 @@ export const products: Product[] = [
 ];
 
 /** Text on the thin bar at the very top of the site. */
-export const announcement = "BACK TO SCHOOL SALE — UP TO 45% OFF · FREE DELIVERY OVER PKR 5,000";
+export const announcement = "";
 
 /** Store contact details used in the footer. */
 export const store = {
@@ -113,7 +115,7 @@ export const store = {
   email: "hello@thriftbyhasni.pk",
   address: "VWVC+M5, Mohra Kor Chisham, near Chakwal–Jhelum Rd, Pakistan",
   hours: "Open daily · closes 8:00 PM",
-  mapsUrl: "https://maps.google.com/?q=VWVC%2BM5+Mohra+Kor+Chisham+Pakistan",
+  mapsUrl: "https://www.google.com/maps/place/Thrift+by+hasni/@32.8938391,72.9166273,935m/data=!3m2!1e3!4b1!4m6!3m5!1s0x392043007e39c833:0x1bb18281164463f6!8m2!3d32.8938346!4d72.9192022!16s%2Fg%2F11z911g8ds?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D",
   instagram: "https://www.instagram.com/thrift_by_hasni1/",
 };
 
