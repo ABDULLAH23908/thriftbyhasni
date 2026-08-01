@@ -29,21 +29,7 @@ export type Product = {
   category: "Men" | "Women" | "Kids" | "Sports" | "Casual";
   price: number;
   oldPrice?: number;
-  condition: Condition;
-  sizes: string[];
-  image: string;
-  sold?: boolean;
-};
-
-export const products: Product[] = [
- export type Product = {
-  id: string;
-  name: string;
-  brand: string;
-  category: "Men" | "Women" | "Kids" | "Sports" | "Casual";
-  price: number;
-  oldPrice?: number;
-  condition: Condition;
+  condition: "Premium+" | "Premium" | "Excellence" | "Very Good";
   sizes: string[];
   image: string;
   sold?: boolean;
@@ -68,7 +54,7 @@ export const products: Product[] = [
     category: "Men",
     price: 1999,
     oldPrice: 4000,
-    condition: "Authentic",
+    condition: "Premium",
     sizes: ["5.5 UK", "38.5 EUR"],
     image: shoes2.url,
   },
@@ -78,7 +64,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Women",
     price: 1999,
-    condition: "Authentic",
+    condition: "Premium",
     sizes: ["6.5 US", "39 EUR"],
     image: shoes3.url,
   },
@@ -89,7 +75,7 @@ export const products: Product[] = [
     category: "Casual",
     price: 1999,
     oldPrice: 14000,
-    condition: "Authentic",
+    condition: "Excellence",
     sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes4.url,
   },
@@ -99,7 +85,7 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Sports",
     price: 1999,
-    condition: "Authentic",
+    condition: "Very Good",
     sizes: ["5 UK", "7 US", "38 EUR"],
     image: shoes5.url,
   },
@@ -110,7 +96,7 @@ export const products: Product[] = [
     category: "Kids",
     price: 1999,
     oldPrice: 11500,
-    condition: "Authentic",
+    condition: "Premium",
     sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes6.url,
   },
