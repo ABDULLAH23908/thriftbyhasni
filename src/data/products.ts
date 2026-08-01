@@ -6,6 +6,7 @@
  *
  *  image  -> use one of the imported photos at the top, or paste a URL
  *             in quotes, e.g. image: "https://example.shoe.jpg"
+ *  images -> optional. Add extra angles/photos of the same pair.
  *  price  -> number in PKR (no commas)
  *  oldPrice -> optional, shows a crossed-out price
  *  condition -> "Premium+" | "Premium" | "Excellence" | "Very Good"
@@ -20,6 +21,18 @@ import shoes4 from "@/assets/shoes4.jpeg.asset.json";
 import shoes5 from "@/assets/shoes5.jpeg.asset.json";
 import shoes6 from "@/assets/shoes6.jpeg.asset.json";
 
+// New batch — uploaded directly via GitHub, so these are plain image
+// imports (no .asset.json wrapper, no .url — Vite gives the URL directly).
+import shoes7 from "@/assets/Shoes7.jpeg";
+import shoes8 from "@/assets/Shoes8.jpeg";
+import shoes9 from "@/assets/Shoes9.jpeg";
+import shoes10 from "@/assets/Shoes10.jpeg";
+import shoes11 from "@/assets/Shoes11.jpeg";
+import shoes12 from "@/assets/Shoes12.jpeg";
+import shoes13 from "@/assets/Shoes13.jpeg";
+import shoes14 from "@/assets/Shoes14.jpeg";
+import shoes15 from "@/assets/Shoes15.jpeg";
+
 export type Condition = "Premium+" | "Premium" | "Excellence" | "Very Good";
 
 export type Product = {
@@ -32,6 +45,9 @@ export type Product = {
   condition: "Premium+" | "Premium" | "Excellence" | "Very Good";
   sizes: string[];
   image: string;
+  /** Optional extra photos/angles of the same pair. */
+  images?: string[];
+  color?: string;
   sold?: boolean;
 };
 
@@ -42,9 +58,9 @@ export const products: Product[] = [
     brand: "Nike",
     category: "Men",
     price: 2499,
-    oldPrice: 3499,
+    oldPrice: 4000,
     condition: "Premium+",
-    sizes: ["Pak 12", "EUR 47"],
+    sizes: ["7", "8", "9", "10"],
     image: shoes1.url,
   },
   {
@@ -101,6 +117,94 @@ export const products: Product[] = [
     condition: "Premium",
     sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes6.url,
+  },
+
+  // ---------- New batch (from WhatsApp catalog) ----------
+  {
+    id: "court-borough-low-2-sneakers",
+    name: "Nike Court Borough Low 2 Sneakers",
+    brand: "Nike",
+    category: "Men",
+    price: 2499,
+    condition: "Premium", // TODO: confirm actual wear grade
+    sizes: ["UK 6", "EUR 40"],
+    image: shoes7,
+  },
+  {
+    id: "court-vision-low-next-nature-black",
+    name: "Nike Court Vision Low Next Nature",
+    brand: "Nike",
+    category: "Men",
+    price: 2999,
+    condition: "Premium", // TODO: confirm actual wear grade
+    sizes: ["UK 8.5", "EUR 42.5"],
+    image: shoes8,
+    color: "Black",
+  },
+  {
+    id: "court-borough-low-2-low-top",
+    name: "Nike Court Borough Low 2 Low Top",
+    brand: "Nike",
+    category: "Women", // TODO: confirm — smaller UK size, guessed Women
+    price: 2499,
+    condition: "Premium+", // TODO: confirm actual wear grade ("Very rare" in chat is not a condition grade)
+    sizes: ["UK 5.5", "EUR 38.5"],
+    image: shoes9,
+  },
+  {
+    id: "af1-react-astronomy-blue",
+    name: "Air Force 1 React 'Astronomy Blue'",
+    brand: "Nike",
+    category: "Men",
+    price: 2999, // TODO: price was cut off in the WhatsApp screenshot — confirm real number
+    condition: "Premium", // TODO: confirm actual wear grade
+    sizes: ["UK 6", "EUR 40"],
+    image: shoes10,
+  },
+  {
+    id: "af1-lumberjack-pack-black",
+    name: "Nike Air Force 1 Low Lumberjack Pack Black",
+    brand: "Nike",
+    category: "Men",
+    price: 3499,
+    condition: "Premium+", // TODO: confirm actual wear grade ("Extremely rare" in chat is not a condition grade)
+    sizes: ["UK 8.5", "EUR 43"],
+    image: shoes11,
+  },
+  {
+    id: "af1-low-white",
+    name: "Nike Air Force 1 Low",
+    brand: "Nike",
+    category: "Men",
+    price: 3499,
+    condition: "Premium", // TODO: confirm actual wear grade
+    sizes: ["UK 7.5", "EUR 42", "US 8.5"],
+    image: shoes12,
+    color: "White",
+  },
+  {
+    id: "af1-07-se-recycled-white-black",
+    name: "Nike Air Force 1 Low '07 SE Recycled White Black Light Bone",
+    brand: "Nike",
+    category: "Men",
+    price: 3499,
+    condition: "Premium+", // TODO: confirm actual wear grade
+    sizes: ["UK 9", "EUR 44", "US 11.5"],
+    image: shoes13,
+    color: "White / Light Bone",
+  },
+  {
+    id: "af1-gs-black-gum-light-brown",
+    name: "Nike Air Force 1 Low GS 'Black Gum Light Brown'",
+    brand: "Nike",
+    // "GS" = Grade School in Nike sizing, so this is youth sizing — flag if wrong
+    category: "Kids",
+    price: 3499,
+    condition: "Premium+", // TODO: confirm actual wear grade
+    sizes: ["UK 8.5", "EUR 43", "US 9.5"],
+    image: shoes14,
+    images: [shoes14, shoes15],
+    color: "Black / Gum",
   },
 ];
 
