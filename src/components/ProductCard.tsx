@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { Product } from "@/data/products";
 import { store } from "@/data/products";
 
@@ -15,29 +16,35 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="group flex flex-col overflow-hidden border border-border bg-card">
-      <div className="relative aspect-square overflow-hidden bg-secondary">
-        <img
-          src={product.image}
-          alt={product.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <span
-          className={`absolute left-0 top-3 px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${conditionTone[product.condition]}`}
-        >
-          {product.condition}
-        </span>
-        {product.sold && (
-          <span className="absolute inset-0 grid place-items-center bg-brand/70 text-sm font-bold uppercase tracking-[0.2em] text-brand-foreground">
-            Sold out
+      <Link to="/shoes/$id" params={{ id: product.id }}>
+        <div className="relative aspect-square overflow-hidden bg-secondary">
+          <img
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <span
+            className={`absolute left-0 top-3 px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${conditionTone[product.condition]}`}
+          >
+            {product.condition}
           </span>
-        )}
-      </div>
+          {product.sold && (
+            <span className="absolute inset-0 grid place-items-center bg-brand/70 text-sm font-bold uppercase tracking-[0.2em] text-brand-foreground">
+              Sold out
+            </span>
+          )}
+        </div>
+      </Link>
       <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {product.brand} · {product.category}
         </p>
-        <h3 className="mt-1 text-base font-semibold leading-snug">{product.name}</h3>
+        <Link to="/shoes/$id" params={{ id: product.id }}>
+          <h3 className="mt-1 text-base font-semibold leading-snug hover:underline">
+            {product.name}
+          </h3>
+        </Link>
         <p className="mt-1 text-xs text-muted-foreground">UK {product.sizes.join(" · ")}</p>
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-lg font-bold">PKR {product.price.toLocaleString()}</span>
