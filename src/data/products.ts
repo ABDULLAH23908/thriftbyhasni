@@ -36,6 +36,20 @@ export type Product = {
 };
 
 export const products: Product[] = [
+ export type Product = {
+  id: string;
+  name: string;
+  brand: string;
+  category: "Men" | "Women" | "Kids" | "Sports" | "Casual";
+  price: number;
+  oldPrice?: number;
+  condition: Condition;
+  sizes: string[];
+  image: string;
+  sold?: boolean;
+};
+
+export const products: Product[] = [
   {
     id: "dunk-panda",
     name: "Dunk Low Retro Panda",
@@ -49,55 +63,55 @@ export const products: Product[] = [
   },
   {
     id: "af1-midnight-navy",
-    name: "Air Force 1 Midnight Navy",
+    name: "Air Force 1 LV8 3 GS 'College Pack - Midnight Navy'",
     brand: "Nike",
     category: "Men",
-    price: 2999,
+    price: 1999,
     oldPrice: 4000,
-    condition: "Premium",
-    sizes: ["8", "9", "10"],
+    condition: "Authentic",
+    sizes: ["5.5 UK", "38.5 EUR"],
     image: shoes2.url,
   },
   {
     id: "af1-sunflower",
-    name: "Air Force 1 Sunflower",
+    name: "Nike Air Force 1 Low LV8 'Have a nike day'",
     brand: "Nike",
     category: "Women",
-    price: 9800,
-    condition: "Premium",
-    sizes: ["5", "6", "7"],
+    price: 1999,
+    condition: "Authentic",
+    sizes: ["6.5 US", "39 EUR"],
     image: shoes3.url,
   },
   {
     id: "af1-floral-swoosh",
-    name: "Air Force 1 Floral Swoosh",
+    name: "GS Nike Air Force 1 Low 'Melted Crayon' CU4632-100",
     brand: "Nike",
     category: "Casual",
-    price: 9200,
+    price: 1999,
     oldPrice: 14000,
-    condition: "Excellence",
-    sizes: ["6", "7", "8"],
+    condition: "Authentic",
+    sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes4.url,
   },
   {
     id: "af1-grey-suede",
-    name: "Air Force 1 Grey Suede",
+    name: "Nike Air Force 1 LV8 'Athletic Club' Sneakers",
     brand: "Nike",
     category: "Sports",
-    price: 8700,
-    condition: "Very Good",
-    sizes: ["8", "9"],
+    price: 1999,
+    condition: "Authentic",
+    sizes: ["5 UK", "7 US", "38 EUR"],
     image: shoes5.url,
   },
   {
     id: "af1-just-do-more",
-    name: "Air Force 1 'Just Do More'",
+    name: "Nike Air Force 1 'JUST DO MORE' Lightning Bolts",
     brand: "Nike",
     category: "Kids",
-    price: 7900,
+    price: 1999,
     oldPrice: 11500,
-    condition: "Premium",
-    sizes: ["3", "4", "5"],
+    condition: "Authentic",
+    sizes: ["6 UK", "8 US", "39 EUR"],
     image: shoes6.url,
   },
 ];
