@@ -5,17 +5,18 @@ import { ProductCard } from "@/components/ProductCard";
 import { products, conditions, brands } from "@/data/products";
 
 type ShopSearch = {
-  category?: string;
-  condition?: string;
-  brand?: string;
+  category?: string | undefined;
+  condition?: string | undefined;
+  brand?: string | undefined;
 };
 
 export const Route = createFileRoute("/shop")({
   validateSearch: (search: Record<string, unknown>): ShopSearch => ({
-    category: typeof search.category === "string" ? search.category : undefined,
-    condition: typeof search.condition === "string" ? search.condition : undefined,
-    brand: typeof search.brand === "string" ? search.brand : undefined,
+    category: typeof search["category"] === "string" ? search["category"] : undefined,
+    condition: typeof search["condition"] === "string" ? search["condition"] : undefined,
+    brand: typeof search["brand"] === "string" ? search["brand"] : undefined,
   }),
+
   head: () => ({
     meta: [
       { title: "Shop Thrifted Sneakers — TBH Thrift" },
