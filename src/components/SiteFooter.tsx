@@ -13,10 +13,19 @@ export function SiteFooter() {
           </p>
         </div>
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.18em]">Get in touch</h3>
+          <h3 className="text-xs font-bold uppercase tracking-[0.18em]">Visit &amp; contact</h3>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>{store.address}</li>
-            <li>{store.phone}</li>
+            <li>
+              <a href={store.mapsUrl} target="_blank" rel="noreferrer" className="underline">
+                {store.address}
+              </a>
+            </li>
+            <li>{store.hours}</li>
+            <li>
+              <a href={`tel:${store.phone.replace(/\s/g, "")}`} className="underline">
+                {store.phone}
+              </a>
+            </li>
             <li>{store.email}</li>
           </ul>
         </div>
