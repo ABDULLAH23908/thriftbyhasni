@@ -42,7 +42,6 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             <li>Sizing &amp; fit guide</li>
             <li>Shipping across Pakistan</li>
-            <li>7-day exchange policy</li>
             <li>
               <a href={store.instagram} target="_blank" rel="noreferrer" className="underline">
                 Instagram
