@@ -112,7 +112,7 @@ export const store = {
   name: "Thrift by Hasni",
   phone: "0334 0801640",
   whatsapp: "+92 334 0801640",
-  email: "hello@thriftbyhasni.pk",
+  email: "thriftbyhasni1@gmail.com",
   address: "VWVC+M5, Mohra Kor Chisham, near Chakwal–Jhelum Rd, Pakistan",
   hours: "Open daily · closes 8:00 PM",
   mapsUrl: "https://www.google.com/maps/place/Thrift+by+hasni/@32.8938391,72.9166273,935m/data=!3m2!1e3!4b1!4m6!3m5!1s0x392043007e39c833:0x1bb18281164463f6!8m2!3d32.8938346!4d72.9192022!16s%2Fg%2F11z911g8ds?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D",
@@ -135,6 +135,7 @@ export const brands = [
   "Asics",
   "Skechers",
   "Saucony",
-  "",
-  "",
+  "qc",
+  "hoka",
+  "brooks",
 ];
