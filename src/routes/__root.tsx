@@ -12,6 +12,9 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+import logoWhite from "@/assets/logo-white.png.asset.json";
+import logoBlue from "@/assets/logo.png.asset.json";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -101,7 +104,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      /* Light Mode: Blue logo */
+      {
+        rel: "icon",
+        href: logoBlue.url,
+        type: "image/png",
+        media: "(prefers-color-scheme: light)",
+      },
+      /* Dark Mode: White logo */
+      {
+        rel: "icon",
+        href: logoWhite.url,
+        type: "image/png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      /* Fallback for browsers without media query support */
+      { rel: "icon", href: logoBlue.url, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
