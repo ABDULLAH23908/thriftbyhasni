@@ -95,7 +95,7 @@ export function saveReviews(reviews: Review[]) {
 
 export function addReview(
   reviews: Review[],
-  input: { name: string; avatarUrl?: string; rating: number; description: string },
+  input: { name: string; avatarUrl?: string | undefined; rating: number; description: string },
 ): Review[] {
   const trimmedAvatar = input.avatarUrl?.trim();
   const newReview: Review = {

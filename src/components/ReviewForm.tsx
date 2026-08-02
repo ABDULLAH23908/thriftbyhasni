@@ -12,11 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { StarRating } from "@/components/StarRating";
+import { ImageDropzone } from "@/components/ImageDropzone";
 
 type ReviewFormProps = {
   onSubmit: (input: {
     name: string;
-    avatarUrl?: string;
+    avatarUrl?: string | undefined;
     rating: number;
     description: string;
   }) => void;
@@ -28,14 +29,14 @@ type Errors = Partial<Record<"name" | "rating" | "description", string>>;
 export function ReviewForm({ onSubmit, trigger }: ReviewFormProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
   const [rating, setRating] = useState(0);
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState<Errors>({});
 
   function reset() {
     setName("");
-    setAvatarUrl("");
+    setAvatarUrl(undefined);
     setRating(0);
     setDescription("");
     setErrors({});
@@ -95,13 +96,8 @@ export function ReviewForm({ onSubmit, trigger }: ReviewFormProps) {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="review-avatar">Avatar URL (optional)</Label>
-            <Input
-              id="review-avatar"
-              value={avatarUrl}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-              placeholder="https://example.com/your-photo.jpg"
-            />
+            <Label>Photo (optional)</Label>
+            <ImageDropzone value={avatarUrl} onChange={setAvatarUrl} />
           </div>
 
           <div className="flex flex-col gap-1.5">
