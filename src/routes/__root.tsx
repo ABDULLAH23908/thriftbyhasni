@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TBH Thrift — Hand-Picked Thrifted Sneakers" },
+      { title: "Thrift by Hasni — Hand-Picked Thrifted Sneakers" },
       {
         name: "description",
         content: "Graded, hand-picked thrifted sneakers at honest prices. Order on WhatsApp.",
       },
-      { name: "author", content: "TBH Thrift" },
-      { property: "og:title", content: "TBH Thrift — Hand-Picked Thrifted Sneakers" },
+      { name: "author", content: "Thrift by Hasni" },
+      { property: "og:title", content: "Thrift by Hasni — Hand-Picked Thrifted Sneakers" },
       {
         property: "og:description",
         content: "Graded, hand-picked thrifted sneakers at honest prices.",
