@@ -104,21 +104,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      /* Light Mode: Blue logo */
+      /* Blue logo for Light theme (Browser tabs & Google Search) */
       {
         rel: "icon",
         href: logoBlue.url,
         type: "image/png",
         media: "(prefers-color-scheme: light)",
       },
-      /* Dark Mode: White logo */
+      /* White logo for Dark theme (Browser tabs & Google Search) */
       {
         rel: "icon",
         href: logoWhite.url,
         type: "image/png",
         media: "(prefers-color-scheme: dark)",
       },
-      /* Fallback for browsers without media query support */
+      /* Fallback favicon */
       { rel: "icon", href: logoBlue.url, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
