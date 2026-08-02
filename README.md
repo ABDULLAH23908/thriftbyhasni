@@ -2,11 +2,11 @@
 
 taking arefrence from this screen shot  make me aa website  so it is a thrift store with the help of refrence products and also make it ez for me to edit and add new products
 
-This project was built with [Lovable](https://lovable.dev).
+This project was made by Abdullah
 
 **Live app**: https://thriftbyhasni.lovable.app
 
-## Build with Lovable
+## Build by Abdullah
 
 Continue developing this project in the [Lovable editor](https://lovable.dev/projects/db769589-fb1d-41e4-a369-a4e1bb447c0e).
 
