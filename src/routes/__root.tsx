@@ -83,6 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Graded, hand-picked thrifted sneakers at honest prices. Order on WhatsApp.",
       },
       { name: "author", content: "Thrift by Hasni" },
+      { property: "og:site_name", content: "Thrift by Hasni" },
       { property: "og:title", content: "Thrift by Hasni — Hand-Picked Thrifted Sneakers" },
       {
         property: "og:description",
