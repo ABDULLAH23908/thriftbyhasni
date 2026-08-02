@@ -93,6 +93,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Graded, hand-picked thrifted sneakers at honest prices.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: logoBlue.url },
+      { property: "og:image:width", content: "512" },
+      { property: "og:image:height", content: "512" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "google-site-verification",
