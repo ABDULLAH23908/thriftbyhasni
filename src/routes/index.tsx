@@ -14,6 +14,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "TBH Thrift — Hand-Picked Thrifted Sneakers in Pakistan" },
+      { property: "og:site_name", content: "Thrift by Hasni" },
       {
         name: "description",
         content:
@@ -155,7 +156,7 @@ function Index() {
                 Message us your size and budget — we source it from the next bale.
               </p>
             </div>
-            <a
+            
               href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
               target="_blank"
               rel="noreferrer"
