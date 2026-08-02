@@ -29,7 +29,7 @@ function ReviewsPage() {
 
   function handleSubmit(input: {
     name: string;
-    avatarUrl?: string;
+    avatarUrl?: string | undefined;
     rating: number;
     description: string;
   }) {
