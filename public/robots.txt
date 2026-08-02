@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://thriftbyhasni.lovable.app/sitemap.xml
