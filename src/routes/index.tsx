@@ -1,4 +1,3 @@
-
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -157,7 +156,7 @@ function Index() {
                 Message us your size and budget — we source it from the next bale.
               </p>
             </div>
-            
+            <a
               href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
               target="_blank"
               rel="noreferrer"
@@ -167,6 +166,7 @@ function Index() {
             </a>
           </div>
         </section>
+        
         <section className="relative overflow-hidden py-16">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background" />
           <div className="relative mx-auto max-w-6xl px-4">
