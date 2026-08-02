@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProductCard } from "@/components/ProductCard";
+import { ReviewCarousel } from "@/components/ReviewCarousel";
 import { products, conditions, brands, store } from "@/data/products";
+import { seedReviews } from "@/data/reviews";
 import hero from "@/assets/hero.jpg";
 import shoes1 from "@/assets/shoes1.png.asset.json";
 import shoes3 from "@/assets/shoes3.jpeg.asset.json";
@@ -161,6 +163,30 @@ function Index() {
             >
               Chat with us
             </a>
+          </div>
+        </section>
+        <section className="relative overflow-hidden py-16">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-secondary/60 via-background to-background" />
+          <div className="relative mx-auto max-w-6xl px-4">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-highlight">
+                  Real customers, real pairs
+                </p>
+                <h2 className="mt-2 text-2xl font-bold uppercase tracking-tight sm:text-3xl">
+                  What our customers say
+                </h2>
+              </div>
+              <Link
+                to="/reviews"
+                className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
+              >
+                View all reviews
+              </Link>
+            </div>
+            <div className="mt-8">
+              <ReviewCarousel reviews={seedReviews} />
+            </div>
           </div>
         </section>
       </main>
