@@ -1,3 +1,5 @@
+import { CartProvider } from "@/lib/cart-context";
+import { CartDrawer } from "@/components/CartDrawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -14,6 +16,27 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 import logoWhite from "@/assets/logo-white.png.asset.json";
 import logoBlue from "@/assets/logo.png.asset.json";
+
+function RootShell({ children }: { children: ReactNode }) {
+  const { queryClient } = Route.useRouteContext();
+
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        <QueryClientProvider client={queryClient}>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+          </CartProvider>
+        </QueryClientProvider>
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 function NotFoundComponent() {
   return (
