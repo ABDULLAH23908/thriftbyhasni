@@ -68,14 +68,12 @@ function CartPage() {
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/checkout"
                 className="flex-1 bg-brand px-6 py-3 text-center text-xs font-bold uppercase tracking-[0.2em] text-brand-foreground hover:bg-brand/90"
               >
-                Checkout on WhatsApp
-              </a>
+                Proceed to checkout
+              </Link>
               <button
                 onClick={clearCart}
                 className="border border-border px-6 py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:bg-secondary"
