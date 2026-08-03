@@ -21,7 +21,7 @@ export type AdminOrder = {
   proof_url: string | null;
 };
 
-async function assertAdmin(context: { supabase: { rpc: unknown }; userId: string }) {
+export async function assertAdmin(context: { supabase: { rpc: unknown }; userId: string }) {
   const supabase = context.supabase as unknown as {
     rpc: (
       fn: "has_role",
