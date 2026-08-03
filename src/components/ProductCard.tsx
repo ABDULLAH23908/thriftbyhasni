@@ -30,7 +30,9 @@ export function ProductCard({ product }: { product: Product }) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <span
-            className={`absolute left-0 top-3 px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${conditionTone[product.condition]}`}
+            className={`absolute left-0 top-3 px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
+              conditionTone[product.condition] ?? "bg-muted text-muted-foreground"
+            }`}
           >
             {product.condition}
           </span>
@@ -80,6 +82,7 @@ export function ProductCard({ product }: { product: Product }) {
               )}
             </button>
             
+            <a
               href={waLink}
               target="_blank"
               rel="noreferrer"
