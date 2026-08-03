@@ -1,7 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Check, ShoppingBag } from "lucide-react";
 import type { Product } from "@/data/products";
-import { store } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 
 const conditionTone: Record<string, string> = {
@@ -13,11 +12,13 @@ const conditionTone: Record<string, string> = {
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem, isInCart, openCart } = useCart();
+  const navigate = useNavigate();
   const inCart = isInCart(product.id);
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    `Hi ${store.name}, I want the ${product.name} (${product.condition}) — PKR ${product.price.toLocaleString()}`,
-  )}`;
+  function handleBuyNow() {
+    if (!inCart) addItem(product);
+    navigate({ to: "/checkout" });
+  }
 
   return (
     <article className="group flex flex-col overflow-hidden border border-border bg-card">
@@ -81,15 +82,13 @@ export function ProductCard({ product }: { product: Product }) {
                 </>
               )}
             </button>
-            
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noreferrer"
+
+            <button
+              onClick={handleBuyNow}
               className="inline-flex justify-center bg-highlight px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-colors hover:bg-highlight/90"
             >
-              Order on WhatsApp
-            </a>
+              Buy Now
+            </button>
           </div>
         )}
       </div>
