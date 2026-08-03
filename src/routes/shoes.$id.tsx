@@ -2,7 +2,6 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft, Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProductImageZoom } from "@/components/ProductImageZoom";
@@ -18,7 +17,20 @@ export const Route = createFileRoute("/shoes/$id")({
   component: ShoeDetailPage,
 });
 
-function ShoeDetailPage() {
+function HighlightBox({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+        {label}:
+      </p>
+      <div className="mt-2 rounded-md bg-foreground px-5 py-3 text-center font-semibold text-background">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+export function ShoeDetailPage() {
   const { id } = Route.useParams();
   const product = products.find((p) => p.id === id);
 
@@ -186,15 +198,4 @@ function ShoeDetailPage() {
   );
 }
 
-function HighlightBox({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-        {label}:
-      </p>
-      <div className="mt-2 rounded-md bg-foreground px-5 py-3 text-center font-semibold text-background">
-        {value}
-      </div>
-    </div>
-  );
-}
+export default ShoeDetailPage;
