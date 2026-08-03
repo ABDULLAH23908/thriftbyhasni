@@ -110,26 +110,6 @@ function ShoeDetailPage() {
               )}
             </div>
 
-            {/* Add to bag — base pair only, no accessories */}
-            <button
-              onClick={() => (inCart ? openCart() : addItem(product))}
-              className={`mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors ${
-                inCart
-                  ? "bg-secondary text-secondary-foreground"
-                  : "bg-brand text-brand-foreground hover:bg-brand/90"
-              }`}
-            >
-              {inCart ? (
-                <>
-                  <Check className="h-3.5 w-3.5" /> In your bag
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
-                </>
-              )}
-            </button>
-
             {/* Static highlight boxes — thrift stock, one exact pair, not a size picker */}
             <div className="mt-6 flex flex-wrap gap-6">
               <HighlightBox label="Size" value={product.sizes.join(" / ")} />
@@ -149,7 +129,7 @@ function ShoeDetailPage() {
               />
             </div>
 
-            {/* Total + order */}
+            {/* Total */}
             <div className="mt-8 rounded-lg border border-border bg-muted/30 p-4">
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <span>Pair</span>
@@ -167,18 +147,36 @@ function ShoeDetailPage() {
               </div>
             </div>
 
+            {/* Add to bag — same size as Order on WhatsApp, sits right above it */}
+            <Button
+              onClick={() => (inCart ? openCart() : addItem(product))}
+              size="lg"
+              className={`mt-4 w-full ${
+                inCart
+                  ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                  : "bg-brand text-brand-foreground hover:bg-brand/90"
+              }`}
+            >
+              {inCart ? (
+                <>
+                  <Check className="h-4 w-4" /> In your bag
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-4 w-4" /> Add to bag
+                </>
+              )}
+            </Button>
+
             <Button
               asChild
               size="lg"
-              className="mt-4 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
+              className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
             >
               <a href={buildWhatsAppLink()} target="_blank" rel="noopener noreferrer">
                 Order on WhatsApp
               </a>
             </Button>
-            <p className="mt-2 text-center text-xs text-muted-foreground">
-              This button orders the pair with your selected add-ons directly. Use "Add to bag" above if you just want to save the pair itself for checkout later.
-            </p>
           </div>
         </div>
       </main>
