@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { ProductImageZoom } from "@/components/ProductImageZoom";
 import { SizeChart } from "@/components/SizeChart";
 import { AccessoriesPicker, accessoriesTotal } from "@/components/AccessoriesPicker";
-import { products, store } from "@/data/products";
+import { products } from "@/data/products";
 import { accessories } from "@/data/accessories";
 import { useCart } from "@/lib/cart-context";
 
@@ -36,6 +36,7 @@ export function ShoeDetailPage() {
 
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const { addItem, isInCart, openCart } = useCart();
+  const navigate = useNavigate();
 
   if (!product) {
     return (
@@ -59,27 +60,9 @@ export function ShoeDetailPage() {
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
-  function buildWhatsAppLink() {
-    const lines = [
-      `Hi! I'd like to order:`,
-      `*${product!.name}*`,
-      `Size: ${product!.sizes.join(" / ")}`,
-      `Condition: ${product!.condition}`,
-    ];
-
-    if (selectedAccessories.length > 0) {
-      lines.push(``, `Add-ons:`);
-      selectedAccessories.forEach((accId) => {
-        const found = ACCESSORY_LOOKUP[accId];
-        lines.push(`- ${found ? found.name : accId}`);
-      });
-    }
-
-    lines.push(``, `Total: Rs ${grandTotal.toLocaleString()}`);
-
-    const text = encodeURIComponent(lines.join("\n"));
-    const phone = store.whatsapp.replace(/[^0-9]/g, "");
-    return `https://wa.me/${phone}?text=${text}`;
+  function handleBuyNow() {
+    if (!inCart) addItem(product!);
+    navigate({ to: "/checkout" });
   }
 
   return (
@@ -159,7 +142,7 @@ export function ShoeDetailPage() {
               </div>
             </div>
 
-            {/* Add to bag — same size as Order on WhatsApp, sits right above it */}
+            {/* Add to bag */}
             <Button
               onClick={() => (inCart ? openCart() : addItem(product))}
               size="lg"
@@ -181,13 +164,11 @@ export function ShoeDetailPage() {
             </Button>
 
             <Button
-              asChild
+              onClick={handleBuyNow}
               size="lg"
               className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
             >
-              <a href={buildWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                ORDER NOW
-              </a>
+              Buy Now
             </Button>
           </div>
         </div>
