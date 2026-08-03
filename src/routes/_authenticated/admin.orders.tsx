@@ -57,6 +57,12 @@ function AdminOrders() {
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <h1 className="text-sm font-bold uppercase tracking-[0.2em]">Orders</h1>
           <div className="flex items-center gap-4">
+            <Link
+              to="/admin/products"
+              className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground"
+            >
+              Products
+            </Link>
             <Link to="/" className="text-[11px] font-bold uppercase tracking-widest">
               Storefront
             </Link>
