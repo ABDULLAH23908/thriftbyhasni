@@ -55,7 +55,14 @@ function Checkout() {
 
   const available = (fresh ?? []).filter((p) => p.status === "available");
   const goneIds = ids.filter((id) => !available.some((p) => p.id === id));
-  const subtotal = available.reduce((sum, p) => sum + p.price, 0);
+
+  // Compute subtotal including add-ons
+  const subtotal = available.reduce((sum, p) => {
+    const cartItem = items.find((i) => i.id === p.id);
+    const addOnsTotal = cartItem?.addOns?.reduce((aSum, a) => aSum + a.price, 0) ?? 0;
+    return sum + p.price + addOnsTotal;
+  }, 0);
+
   const total = subtotal + payment.deliveryFee;
 
   const [form, setForm] = useState({
@@ -98,10 +105,14 @@ function Checkout() {
       const result = await submitOrder({
         data: {
           ...form,
-          items: available.map((p) => ({
-            productId: p.id,
-            size: items.find((i) => i.id === p.id)?.size ?? p.sizes[0] ?? "",
-          })),
+          items: available.map((p) => {
+            const cartItem = items.find((i) => i.id === p.id);
+            return {
+              productId: p.id,
+              size: cartItem?.size ?? p.sizes[0] ?? "",
+              addOns: cartItem?.addOns ?? [],
+            };
+          }),
           proof: proofPayload,
         },
       });
@@ -149,22 +160,43 @@ function Checkout() {
               {isLoading && <p className="mt-4 text-sm text-muted-foreground">Checking stock…</p>}
 
               <ul className="mt-4 divide-y divide-border border-y border-border">
-                {available.map((p) => (
-                  <li key={p.id} className="flex gap-4 py-4">
-                    <img
-                      src={resolveProductImage(p.image)}
-                      alt={p.name}
-                      className="h-20 w-20 object-cover"
-                    />
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold">{p.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {p.condition} · {items.find((i) => i.id === p.id)?.size ?? p.sizes[0]}
-                      </p>
-                    </div>
-                    <span className="text-sm font-bold">Rs {p.price.toLocaleString()}</span>
-                  </li>
-                ))}
+                {available.map((p) => {
+                  const cartItem = items.find((i) => i.id === p.id);
+                  const addOnsTotal = cartItem?.addOns?.reduce((sum, a) => sum + a.price, 0) ?? 0;
+                  const itemTotal = p.price + addOnsTotal;
+
+                  return (
+                    <li key={p.id} className="flex gap-4 py-4">
+                      <img
+                        src={resolveProductImage(p.image)}
+                        alt={p.name}
+                        className="h-20 w-20 object-cover"
+                      />
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold">{p.name}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {p.condition} · {cartItem?.size ?? p.sizes[0]}
+                        </p>
+
+                        {/* Add-ons Checklist */}
+                        {cartItem?.addOns && cartItem.addOns.length > 0 && (
+                          <div className="mt-2 border-l-2 border-brand/50 pl-2 text-xs text-muted-foreground">
+                            <span className="font-bold text-foreground">Included Add-ons:</span>
+                            <ul className="mt-0.5 space-y-0.5">
+                              {cartItem.addOns.map((addon) => (
+                                <li key={addon.id} className="flex justify-between">
+                                  <span>+ {addon.name}</span>
+                                  <span>Rs {addon.price.toLocaleString()}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-sm font-bold">Rs {itemTotal.toLocaleString()}</span>
+                    </li>
+                  );
+                })}
               </ul>
 
               {goneIds.length > 0 && (
@@ -189,7 +221,7 @@ function Checkout() {
 
               <dl className="mt-6 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <dt>Subtotal (pairs)</dt>
+                  <dt>Subtotal (pairs & add-ons)</dt>
                   <dd className="font-semibold">Rs {subtotal.toLocaleString()}</dd>
                 </div>
                 <div className="flex justify-between">
