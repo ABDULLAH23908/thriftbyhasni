@@ -1,8 +1,12 @@
 import { Link } from "@tanstack/react-router";
+import { ShoppingBag } from "lucide-react";
 import logoWhite from "@/assets/logo-white.png.asset.json";
 import { announcement, store } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 
 export function SiteHeader() {
+  const { count, toggleCart } = useCart();
+
   return (
     <header className="sticky top-0 z-50">
       <div className="bg-highlight px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-[0.14em] text-highlight-foreground">
@@ -42,14 +46,29 @@ export function SiteHeader() {
               Reviews
             </Link>
           </nav>
-          <a
-            href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
-            target="_blank"
-            rel="noreferrer"
-            className="ml-auto rounded-sm bg-highlight px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-transform hover:-translate-y-0.5"
-          >
-            Order on WhatsApp
-          </a>
+
+          <div className="ml-auto flex items-center gap-3">
+            <button
+              onClick={toggleCart}
+              aria-label="Open cart"
+              className="relative rounded-sm p-2 opacity-90 transition-opacity hover:opacity-100"
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {count > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-highlight text-[10px] font-bold text-highlight-foreground">
+                  {count}
+                </span>
+              )}
+            </button>
+            
+              href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-sm bg-highlight px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-transform hover:-translate-y-0.5"
+            >
+              Order on WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </header>
