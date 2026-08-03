@@ -1,7 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Check, ShoppingBag } from "lucide-react";
 import type { Product } from "@/data/products";
-import { store } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 
 const conditionTone: Record<string, string> = {
@@ -13,15 +12,26 @@ const conditionTone: Record<string, string> = {
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem, isInCart, openCart } = useCart();
+  const navigate = useNavigate();
   const inCart = isInCart(product.id);
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    `Hi ${store.name}, I want the ${product.name} (${product.condition}) — PKR ${product.price.toLocaleString()}`,
-  )}`;
+  function handleBuyNow() {
+    if (!inCart) addItem(product);
+    navigate({ to: "/checkout" });
+  }
 
   return (
-    <article className="group flex flex-col overflow-hidden border border-border bg-card">
-      <Link to="/shoes/$id" params={{ id: product.id }}>
+    <article
+      className={`group flex flex-col overflow-hidden border border-border bg-card transition-all ${
+        product.sold ? "opacity-60 grayscale" : ""
+      }`}
+    >
+      <Link
+        to="/shoes/$id"
+        params={{ id: product.id }}
+        tabIndex={product.sold ? -1 : 0}
+        className={product.sold ? "pointer-events-none" : ""}
+      >
         <div className="relative aspect-square overflow-hidden bg-secondary">
           <img
             src={product.image}
@@ -37,22 +47,31 @@ export function ProductCard({ product }: { product: Product }) {
             {product.condition}
           </span>
           {product.sold && (
-            <span className="absolute inset-0 grid place-items-center bg-brand/70 text-sm font-bold uppercase tracking-[0.2em] text-brand-foreground">
+            <span className="absolute inset-0 grid place-items-center bg-black/60 text-xs font-bold uppercase tracking-[0.2em] text-white">
               Sold out
             </span>
           )}
         </div>
       </Link>
+
       <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           {product.brand} · {product.category}
         </p>
-        <Link to="/shoes/$id" params={{ id: product.id }}>
-          <h3 className="mt-1 text-base font-semibold leading-snug hover:underline">
+        
+        <Link
+          to="/shoes/$id"
+          params={{ id: product.id }}
+          tabIndex={product.sold ? -1 : 0}
+          className={product.sold ? "pointer-events-none" : ""}
+        >
+          <h3 className={`mt-1 text-base font-semibold leading-snug ${!product.sold && "hover:underline"}`}>
             {product.name}
           </h3>
         </Link>
+        
         <p className="mt-1 text-xs text-muted-foreground"> {product.sizes.join(" · ")}</p>
+        
         <div className="mt-3 flex items-baseline gap-2">
           <span className="text-lg font-bold">PKR {product.price.toLocaleString()}</span>
           {product.oldPrice && (
@@ -61,37 +80,46 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           )}
         </div>
-        {!product.sold && (
-          <div className="mt-4 flex flex-col gap-2">
+
+        {/* Action Buttons */}
+        <div className="mt-4 flex flex-col gap-2">
+          {product.sold ? (
             <button
-              onClick={() => (inCart ? openCart() : addItem(product))}
-              className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-colors ${
-                inCart
-                  ? "bg-secondary text-secondary-foreground"
-                  : "bg-brand text-brand-foreground hover:bg-brand/90"
-              }`}
+              disabled
+              className="inline-flex justify-center bg-muted px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-muted-foreground cursor-not-allowed"
             >
-              {inCart ? (
-                <>
-                  <Check className="h-3.5 w-3.5" /> In your bag
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
-                </>
-              )}
+              Sold Out
             </button>
-            
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex justify-center bg-highlight px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-colors hover:bg-highlight/90"
-            >
-              Order on WhatsApp
-            </a>
-          </div>
-        )}
+          ) : (
+            <>
+              <button
+                onClick={() => (inCart ? openCart() : addItem(product))}
+                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-colors ${
+                  inCart
+                    ? "bg-secondary text-secondary-foreground"
+                    : "bg-brand text-brand-foreground hover:bg-brand/90"
+                }`}
+              >
+                {inCart ? (
+                  <>
+                    <Check className="h-3.5 w-3.5" /> In your bag
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="inline-flex justify-center bg-highlight px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-colors hover:bg-highlight/90"
+              >
+                Buy Now
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </article>
   );

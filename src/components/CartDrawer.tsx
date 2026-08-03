@@ -1,14 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { X, Trash2, ShoppingBag } from "lucide-react";
-import { useCart, buildCartWhatsAppMessage } from "@/lib/cart-context";
-import { store } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, subtotal } = useCart();
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    buildCartWhatsAppMessage(items, store.name),
-  )}`;
 
   return (
     <>
@@ -79,15 +75,13 @@ export function CartDrawer() {
             <p className="mt-1 text-[11px] text-muted-foreground">
               Each pair is one of a kind — we'll confirm it's still available on WhatsApp.
             </p>
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/checkout"
               onClick={closeCart}
               className="mt-4 flex items-center justify-center bg-brand px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand/90"
             >
-              Checkout on WhatsApp
-            </a>
+              Proceed to checkout
+            </Link>
             <Link
               to="/cart"
               onClick={closeCart}
