@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { X, Trash2, ShoppingBag } from "lucide-react";
-import { useCart, buildCartWhatsAppMessage } from "@/lib/cart-context";
-import { store } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, subtotal } = useCart();

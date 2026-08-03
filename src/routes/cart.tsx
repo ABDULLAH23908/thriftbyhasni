@@ -2,8 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Trash2, ShoppingBag } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { useCart, buildCartWhatsAppMessage } from "@/lib/cart-context";
-import { store } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Your Bag — TBH Thrift" }] }),
