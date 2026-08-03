@@ -186,7 +186,7 @@ export function ShoeDetailPage() {
               className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
             >
               <a href={buildWhatsAppLink()} target="_blank" rel="noopener noreferrer">
-                Order on WhatsApp
+                ORDER NOW
               </a>
             </Button>
           </div>
