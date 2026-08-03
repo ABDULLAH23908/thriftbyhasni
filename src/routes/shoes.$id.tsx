@@ -56,11 +56,13 @@ export function ShoeDetailPage() {
     );
   }
 
+  const isSoldOut = Boolean(product.sold);
   const inCart = isInCart(product.id);
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
   function handleBuyNow() {
+    if (isSoldOut) return;
     if (!inCart) addItem(product!);
     navigate({ to: "/checkout" });
   }
@@ -79,9 +81,20 @@ export function ShoeDetailPage() {
         </Link>
 
         <div className="grid gap-10 lg:grid-cols-2">
-          {/* Image with magnifier */}
-          <div className="aspect-square w-full rounded-lg border border-border bg-card">
+          {/* Image Container with Sold Out state */}
+          <div
+            className={`relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-card ${
+              isSoldOut ? "opacity-60 grayscale" : ""
+            }`}
+          >
             <ProductImageZoom src={product.image} alt={product.name} />
+            {isSoldOut && (
+              <div className="absolute inset-0 grid place-items-center bg-black/50 pointer-events-none">
+                <span className="bg-destructive text-destructive-foreground px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] rounded">
+                  Sold Out
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Details */}
@@ -105,7 +118,7 @@ export function ShoeDetailPage() {
               )}
             </div>
 
-            {/* Static highlight boxes — thrift stock, one exact pair, not a size picker */}
+            {/* Static highlight boxes */}
             <div className="mt-6 flex flex-wrap gap-6">
               <HighlightBox label="Size" value={product.sizes.join(" / ")} />
               <HighlightBox label="Condition" value={product.condition} />
@@ -116,8 +129,8 @@ export function ShoeDetailPage() {
               <SizeChart />
             </div>
 
-            {/* Accessories */}
-            <div className="mt-8">
+            {/* Accessories Picker (Disabled if sold out) */}
+            <div className={`mt-8 ${isSoldOut ? "pointer-events-none opacity-50" : ""}`}>
               <AccessoriesPicker
                 selected={selectedAccessories}
                 onChange={setSelectedAccessories}
@@ -142,34 +155,46 @@ export function ShoeDetailPage() {
               </div>
             </div>
 
-            {/* Add to bag */}
-            <Button
-              onClick={() => (inCart ? openCart() : addItem(product))}
-              size="lg"
-              className={`mt-4 w-full ${
-                inCart
-                  ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                  : "bg-brand text-brand-foreground hover:bg-brand/90"
-              }`}
-            >
-              {inCart ? (
-                <>
-                  <Check className="h-4 w-4" /> In your bag
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="h-4 w-4" /> Add to bag
-                </>
-              )}
-            </Button>
+            {/* Action Buttons */}
+            {isSoldOut ? (
+              <Button
+                disabled
+                size="lg"
+                className="mt-4 w-full bg-muted text-muted-foreground cursor-not-allowed uppercase font-bold tracking-widest"
+              >
+                Sold Out
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onClick={() => (inCart ? openCart() : addItem(product))}
+                  size="lg"
+                  className={`mt-4 w-full ${
+                    inCart
+                      ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                      : "bg-brand text-brand-foreground hover:bg-brand/90"
+                  }`}
+                >
+                  {inCart ? (
+                    <>
+                      <Check className="h-4 w-4" /> In your bag
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="h-4 w-4" /> Add to bag
+                    </>
+                  )}
+                </Button>
 
-            <Button
-              onClick={handleBuyNow}
-              size="lg"
-              className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
-            >
-              Buy Now
-            </Button>
+                <Button
+                  onClick={handleBuyNow}
+                  size="lg"
+                  className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
+                >
+                  Buy Now
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </main>
