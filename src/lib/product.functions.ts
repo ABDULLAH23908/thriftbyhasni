@@ -13,15 +13,14 @@ export const markProductsSoldInFile = createServerFn({ method: "POST" })
 
     let fileContent = fs.readFileSync(filePath, "utf-8");
 
-    // Loop over each product ID and update/add the `sold: true` or `sold: false` property
+    // Loop over each product ID and update or add the `sold: true` / `sold: false` property
     for (const id of data.productIds) {
       const idRegex = new RegExp(
-        `(id:\\\\s*["']${id}["'][\\\\s\\\\S]*?)(sold:\\\\s*(?:true|false),?)?([\\\\s\\\\S]*?)(?=};|},\\\\s*{|\\\\n\\\\s*];)`,
+        `(id:\\s*["']${id}["'][\\s\\S]*?)(sold:\\s*(?:true|false),?)?([\\s\\S]*?)(?=};|},\\s*{|\\n\\s*];)`,
         "g"
       );
 
       fileContent = fileContent.replace(idRegex, (match, p1, p2, p3, p4) => {
-        // If 'sold' key exists, update it; otherwise insert it right after the id line
         if (p2) {
           return `${p1}sold: ${data.sold},${p4}`;
         }
