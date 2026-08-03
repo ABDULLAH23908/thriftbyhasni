@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft, Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { ProductImageZoom } from "@/components/ProductImageZoom";
 import { SizeChart } from "@/components/SizeChart";
 import { AccessoriesPicker, accessoriesTotal } from "@/components/AccessoriesPicker";
-import { products } from "@/data/products";
+import { products, store } from "@/data/products";
 import { accessories } from "@/data/accessories";
 import { useCart } from "@/lib/cart-context";
 
@@ -36,7 +36,6 @@ export function ShoeDetailPage() {
 
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const { addItem, isInCart, openCart } = useCart();
-  const navigate = useNavigate();
 
   if (!product) {
     return (
@@ -56,15 +55,31 @@ export function ShoeDetailPage() {
     );
   }
 
-  const isSoldOut = Boolean(product.sold);
   const inCart = isInCart(product.id);
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
-  function handleBuyNow() {
-    if (isSoldOut) return;
-    if (!inCart) addItem(product!);
-    navigate({ to: "/checkout" });
+  function buildWhatsAppLink() {
+    const lines = [
+      `Hi! I'd like to order:`,
+      `*${product!.name}*`,
+      `Size: ${product!.sizes.join(" / ")}`,
+      `Condition: ${product!.condition}`,
+    ];
+
+    if (selectedAccessories.length > 0) {
+      lines.push(``, `Add-ons:`);
+      selectedAccessories.forEach((accId) => {
+        const found = ACCESSORY_LOOKUP[accId];
+        lines.push(`- ${found ? found.name : accId}`);
+      });
+    }
+
+    lines.push(``, `Total: Rs ${grandTotal.toLocaleString()}`);
+
+    const text = encodeURIComponent(lines.join("\n"));
+    const phone = store.whatsapp.replace(/[^0-9]/g, "");
+    return `https://wa.me/${phone}?text=${text}`;
   }
 
   return (
@@ -81,20 +96,9 @@ export function ShoeDetailPage() {
         </Link>
 
         <div className="grid gap-10 lg:grid-cols-2">
-          {/* Image Container with Sold Out state */}
-          <div
-            className={`relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-card ${
-              isSoldOut ? "opacity-60 grayscale" : ""
-            }`}
-          >
+          {/* Image with magnifier */}
+          <div className="aspect-square w-full rounded-lg border border-border bg-card">
             <ProductImageZoom src={product.image} alt={product.name} />
-            {isSoldOut && (
-              <div className="absolute inset-0 grid place-items-center bg-black/50 pointer-events-none">
-                <span className="bg-destructive text-destructive-foreground px-4 py-2 text-sm font-bold uppercase tracking-[0.2em] rounded">
-                  Sold Out
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Details */}
@@ -118,7 +122,7 @@ export function ShoeDetailPage() {
               )}
             </div>
 
-            {/* Static highlight boxes */}
+            {/* Static highlight boxes — thrift stock, one exact pair, not a size picker */}
             <div className="mt-6 flex flex-wrap gap-6">
               <HighlightBox label="Size" value={product.sizes.join(" / ")} />
               <HighlightBox label="Condition" value={product.condition} />
@@ -129,8 +133,8 @@ export function ShoeDetailPage() {
               <SizeChart />
             </div>
 
-            {/* Accessories Picker (Disabled if sold out) */}
-            <div className={`mt-8 ${isSoldOut ? "pointer-events-none opacity-50" : ""}`}>
+            {/* Accessories */}
+            <div className="mt-8">
               <AccessoriesPicker
                 selected={selectedAccessories}
                 onChange={setSelectedAccessories}
@@ -155,46 +159,36 @@ export function ShoeDetailPage() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            {isSoldOut ? (
-              <Button
-                disabled
-                size="lg"
-                className="mt-4 w-full bg-muted text-muted-foreground cursor-not-allowed uppercase font-bold tracking-widest"
-              >
-                Sold Out
-              </Button>
-            ) : (
-              <>
-                <Button
-                  onClick={() => (inCart ? openCart() : addItem(product))}
-                  size="lg"
-                  className={`mt-4 w-full ${
-                    inCart
-                      ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                      : "bg-brand text-brand-foreground hover:bg-brand/90"
-                  }`}
-                >
-                  {inCart ? (
-                    <>
-                      <Check className="h-4 w-4" /> In your bag
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingBag className="h-4 w-4" /> Add to bag
-                    </>
-                  )}
-                </Button>
+            {/* Add to bag — same size as Order on WhatsApp, sits right above it */}
+            <Button
+              onClick={() => (inCart ? openCart() : addItem(product))}
+              size="lg"
+              className={`mt-4 w-full ${
+                inCart
+                  ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                  : "bg-brand text-brand-foreground hover:bg-brand/90"
+              }`}
+            >
+              {inCart ? (
+                <>
+                  <Check className="h-4 w-4" /> In your bag
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-4 w-4" /> Add to bag
+                </>
+              )}
+            </Button>
 
-                <Button
-                  onClick={handleBuyNow}
-                  size="lg"
-                  className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
-                >
-                  Buy Now
-                </Button>
-              </>
-            )}
+            <Button
+              asChild
+              size="lg"
+              className="mt-3 w-full bg-highlight text-highlight-foreground hover:bg-highlight/90"
+            >
+              <a href={buildWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                Order on WhatsApp
+              </a>
+            </Button>
           </div>
         </div>
       </main>

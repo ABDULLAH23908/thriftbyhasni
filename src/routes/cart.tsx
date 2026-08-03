@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Trash2, ShoppingBag } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { useCart } from "@/lib/cart-context";
+import { useCart, buildCartWhatsAppMessage } from "@/lib/cart-context";
+import { store } from "@/data/products";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Your Bag — TBH Thrift" }] }),
@@ -11,6 +12,10 @@ export const Route = createFileRoute("/cart")({
 
 function CartPage() {
   const { items, removeItem, subtotal, clearCart } = useCart();
+
+  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+    buildCartWhatsAppMessage(items, store.name),
+  )}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -32,46 +37,26 @@ function CartPage() {
         ) : (
           <>
             <ul className="mt-8 divide-y divide-border border-y border-border">
-              {items.map((item) => {
-                const addOnsTotal = item.addOns?.reduce((sum, a) => sum + a.price, 0) ?? 0;
-                const itemTotal = item.price + addOnsTotal;
-
-                return (
-                  <li key={item.id} className="flex gap-4 py-5">
-                    <img src={item.image} alt={item.name} className="h-24 w-24 object-cover" />
-                    <div className="flex flex-1 flex-col">
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {item.brand} · {item.condition} · {item.size}
-                      </p>
-
-                      {/* Add-ons Checklist */}
-                      {item.addOns && item.addOns.length > 0 && (
-                        <div className="mt-2 text-xs text-muted-foreground">
-                          <p className="font-semibold text-foreground">Add-ons:</p>
-                          <ul className="list-inside list-disc">
-                            {item.addOns.map((addon) => (
-                              <li key={addon.id}>
-                                {addon.name} (+PKR {addon.price.toLocaleString()})
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      <div className="mt-auto flex items-center justify-between pt-2">
-                        <span className="font-bold">PKR {itemTotal.toLocaleString()}</span>
-                        <button
-                          onClick={() => removeItem(item.id)}
-                          className="flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" /> Remove
-                        </button>
-                      </div>
+              {items.map((item) => (
+                <li key={item.id} className="flex gap-4 py-5">
+                  <img src={item.image} alt={item.name} className="h-24 w-24 object-cover" />
+                  <div className="flex flex-1 flex-col">
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {item.brand} · {item.condition} · {item.size}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between">
+                      <span className="font-bold">PKR {item.price.toLocaleString()}</span>
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" /> Remove
+                      </button>
                     </div>
-                  </li>
-                );
-              })}
+                  </div>
+                </li>
+              ))}
             </ul>
 
             <div className="mt-6 flex items-center justify-between border-t border-border pt-6 text-lg font-bold uppercase tracking-widest">
@@ -83,12 +68,14 @@ function CartPage() {
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to="/checkout"
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noreferrer"
                 className="flex-1 bg-brand px-6 py-3 text-center text-xs font-bold uppercase tracking-[0.2em] text-brand-foreground hover:bg-brand/90"
               >
-                Proceed to checkout
-              </Link>
+                Checkout on WhatsApp
+              </a>
               <button
                 onClick={clearCart}
                 className="border border-border px-6 py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:bg-secondary"
