@@ -2,8 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Trash2, ShoppingBag } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { useCart, buildCartWhatsAppMessage } from "@/lib/cart-context";
-import { store } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Your Bag — TBH Thrift" }] }),
@@ -13,9 +12,6 @@ export const Route = createFileRoute("/cart")({
 function CartPage() {
   const { items, removeItem, subtotal, clearCart } = useCart();
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    buildCartWhatsAppMessage(items, store.name),
-  )}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,14 +64,12 @@ function CartPage() {
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/checkout"
                 className="flex-1 bg-brand px-6 py-3 text-center text-xs font-bold uppercase tracking-[0.2em] text-brand-foreground hover:bg-brand/90"
               >
-                Checkout on WhatsApp
-              </a>
+                Proceed to checkout
+              </Link>
               <button
                 onClick={clearCart}
                 className="border border-border px-6 py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:bg-secondary"
