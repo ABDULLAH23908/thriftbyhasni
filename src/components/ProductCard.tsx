@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Check, ShoppingBag } from "lucide-react";
 import type { Product } from "@/data/products";
+import { store } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 
 const conditionTone: Record<string, string> = {
@@ -13,6 +14,10 @@ const conditionTone: Record<string, string> = {
 export function ProductCard({ product }: { product: Product }) {
   const { addItem, isInCart, openCart } = useCart();
   const inCart = isInCart(product.id);
+
+  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+    `Hi ${store.name}, I want the ${product.name} (${product.condition}) — PKR ${product.price.toLocaleString()}`,
+  )}`;
 
   return (
     <article className="group flex flex-col overflow-hidden border border-border bg-card">
@@ -55,24 +60,34 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
         {!product.sold && (
-          <button
-            onClick={() => (inCart ? openCart() : addItem(product))}
-            className={`mt-4 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-colors ${
-              inCart
-                ? "bg-secondary text-secondary-foreground"
-                : "bg-brand text-brand-foreground hover:bg-brand/90"
-            }`}
-          >
-            {inCart ? (
-              <>
-                <Check className="h-3.5 w-3.5" /> In your bag
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
-              </>
-            )}
-          </button>
+          <div className="mt-4 flex flex-col gap-2">
+            <button
+              onClick={() => (inCart ? openCart() : addItem(product))}
+              className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-colors ${
+                inCart
+                  ? "bg-secondary text-secondary-foreground"
+                  : "bg-brand text-brand-foreground hover:bg-brand/90"
+              }`}
+            >
+              {inCart ? (
+                <>
+                  <Check className="h-3.5 w-3.5" /> In your bag
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
+                </>
+              )}
+            </button>
+            
+              href={waLink}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex justify-center bg-highlight px-4 py-2.5 text-[11px] font-bold uppercase tracking-widest text-highlight-foreground transition-colors hover:bg-highlight/90"
+            >
+              Order on WhatsApp
+            </a>
+          </div>
         )}
       </div>
     </article>
