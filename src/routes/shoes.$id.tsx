@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Check, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -10,6 +10,7 @@ import { SizeChart } from "@/components/SizeChart";
 import { AccessoriesPicker, accessoriesTotal } from "@/components/AccessoriesPicker";
 import { products, store } from "@/data/products";
 import { accessories } from "@/data/accessories";
+import { useCart } from "@/lib/cart-context";
 
 const ACCESSORY_LOOKUP = Object.fromEntries(accessories.map((a) => [a.id, a]));
 
@@ -22,6 +23,7 @@ function ShoeDetailPage() {
   const product = products.find((p) => p.id === id);
 
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
+  const { addItem, isInCart, openCart } = useCart();
 
   if (!product) {
     return (
@@ -41,6 +43,7 @@ function ShoeDetailPage() {
     );
   }
 
+  const inCart = isInCart(product.id);
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
@@ -107,6 +110,26 @@ function ShoeDetailPage() {
               )}
             </div>
 
+            {/* Add to bag — base pair only, no accessories */}
+            <button
+              onClick={() => (inCart ? openCart() : addItem(product))}
+              className={`mt-4 inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs font-bold uppercase tracking-widest transition-colors ${
+                inCart
+                  ? "bg-secondary text-secondary-foreground"
+                  : "bg-brand text-brand-foreground hover:bg-brand/90"
+              }`}
+            >
+              {inCart ? (
+                <>
+                  <Check className="h-3.5 w-3.5" /> In your bag
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-3.5 w-3.5" /> Add to bag
+                </>
+              )}
+            </button>
+
             {/* Static highlight boxes — thrift stock, one exact pair, not a size picker */}
             <div className="mt-6 flex flex-wrap gap-6">
               <HighlightBox label="Size" value={product.sizes.join(" / ")} />
@@ -153,6 +176,9 @@ function ShoeDetailPage() {
                 Order on WhatsApp
               </a>
             </Button>
+            <p className="mt-2 text-center text-xs text-muted-foreground">
+              This button orders the pair with your selected add-ons directly. Use "Add to bag" above if you just want to save the pair itself for checkout later.
+            </p>
           </div>
         </div>
       </main>
