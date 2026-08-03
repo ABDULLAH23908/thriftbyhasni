@@ -13,19 +13,38 @@ export const markProductsSoldInFile = createServerFn({ method: "POST" })
 
     let fileContent = fs.readFileSync(filePath, "utf-8");
 
-    // Loop over each product ID and update or add the `sold: true` / `sold: false` property
     for (const id of data.productIds) {
-      const idRegex = new RegExp(
-        `(id:\\s*["']${id}["'][\\s\\S]*?)(sold:\\s*(?:true|false),?)?([\\s\\S]*?)(?=};|},\\s*{|\\n\\s*];)`,
-        "g"
-      );
+      // Look for the product id string directly
+      const idPatternDouble = `id: "${id}"`;
+      const idPatternSingle = `id: '${id}'`;
 
-      fileContent = fileContent.replace(idRegex, (match, p1, p2, p3, p4) => {
-        if (p2) {
-          return `${p1}sold: ${data.sold},${p4}`;
+      let matchIndex = fileContent.indexOf(idPatternDouble);
+      if (matchIndex === -1) {
+        matchIndex = fileContent.indexOf(idPatternSingle);
+      }
+
+      // If product ID exists in the file
+      if (matchIndex !== -1) {
+        const endOfLineIndex = fileContent.indexOf("\n", matchIndex);
+
+        if (endOfLineIndex !== -1) {
+          // Look at the lines immediately following the id line
+          const nextBlock = fileContent.slice(endOfLineIndex, endOfLineIndex + 150);
+
+          if (nextBlock.includes("sold:")) {
+            // Replace existing sold status
+            fileContent = fileContent.replace(
+              /sold:\s*(true|false),?/,
+              `sold: ${data.sold},`
+            );
+          } else {
+            // Insert new sold property directly below the id line
+            const before = fileContent.slice(0, endOfLineIndex);
+            const after = fileContent.slice(endOfLineIndex);
+            fileContent = `${before}\n    sold: ${data.sold},${after}`;
+          }
         }
-        return `${p1}sold: ${data.sold},\n    ${p4 ? p4.trimStart() : ""}`;
-      });
+      }
     }
 
     fs.writeFileSync(filePath, fileContent, "utf-8");
