@@ -13,9 +13,6 @@ export const Route = createFileRoute("/cart")({
 function CartPage() {
   const { items, removeItem, subtotal, clearCart } = useCart();
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    buildCartWhatsAppMessage(items, store.name),
-  )}`;
 
   return (
     <div className="min-h-screen bg-background">

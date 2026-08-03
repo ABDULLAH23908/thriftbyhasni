@@ -6,9 +6,6 @@ import { store } from "@/data/products";
 export function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, subtotal } = useCart();
 
-  const waLink = `https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    buildCartWhatsAppMessage(items, store.name),
-  )}`;
 
   return (
     <>
