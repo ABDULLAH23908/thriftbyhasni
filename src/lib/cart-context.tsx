@@ -1,6 +1,12 @@
 import { createContext, useContext, useReducer, type ReactNode } from "react";
 import type { Product } from "@/data/products";
 
+export type AddOn = {
+  id: string;
+  name: string;
+  price: number;
+};
+
 export type CartItem = {
   id: string;
   name: string;
@@ -9,6 +15,7 @@ export type CartItem = {
   condition: string;
   size: string;
   image: string;
+  addOns?: AddOn[];
 };
 
 type CartState = { items: CartItem[]; isOpen: boolean };
@@ -46,7 +53,7 @@ type CartContextValue = {
   isOpen: boolean;
   count: number;
   subtotal: number;
-  addItem: (product: Product) => void;
+  addItem: (product: Product, options?: { size?: string; addOns?: AddOn[] }) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
   openCart: () => void;
@@ -60,7 +67,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], isOpen: false });
 
-  const addItem = (product: Product) => {
+  const addItem = (product: Product, options?: { size?: string; addOns?: AddOn[] }) => {
     dispatch({
       type: "ADD_ITEM",
       item: {
@@ -69,17 +76,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
         brand: product.brand,
         price: product.price,
         condition: product.condition,
-        size: product.sizes[0] ?? "",
+        size: options?.size ?? product.sizes[0] ?? "",
         image: product.image,
+        addOns: options?.addOns ?? [],
       },
     });
   };
+
+  // Calculates total including item prices + all selected add-ons
+  const subtotal = state.items.reduce((sum, item) => {
+    const addOnsTotal = item.addOns?.reduce((aSum, a) => aSum + a.price, 0) ?? 0;
+    return sum + item.price + addOnsTotal;
+  }, 0);
 
   const value: CartContextValue = {
     items: state.items,
     isOpen: state.isOpen,
     count: state.items.length,
-    subtotal: state.items.reduce((sum, i) => sum + i.price, 0),
+    subtotal,
     addItem,
     removeItem: (id) => dispatch({ type: "REMOVE_ITEM", id }),
     clearCart: () => dispatch({ type: "CLEAR_CART" }),
@@ -100,10 +114,19 @@ export function useCart() {
 
 export function buildCartWhatsAppMessage(items: CartItem[], storeName: string) {
   if (items.length === 0) return "";
-  const lines = items.map(
-    (i, idx) =>
-      `${idx + 1}. ${i.name} (${i.condition}, ${i.size}) — PKR ${i.price.toLocaleString()}`,
-  );
-  const total = items.reduce((sum, i) => sum + i.price, 0);
+  const lines = items.map((i, idx) => {
+    const addOnsText =
+      i.addOns && i.addOns.length > 0
+        ? ` + Add-ons: [${i.addOns.map((a) => a.name).join(", ")}]`
+        : "";
+    const itemTotal = i.price + (i.addOns?.reduce((sum, a) => sum + a.price, 0) ?? 0);
+    return `${idx + 1}. ${i.name} (${i.condition}, ${i.size})${addOnsText} — PKR ${itemTotal.toLocaleString()}`;
+  });
+
+  const total = items.reduce((sum, i) => {
+    const addOnsTotal = i.addOns?.reduce((aSum, a) => aSum + a.price, 0) ?? 0;
+    return sum + i.price + addOnsTotal;
+  }, 0);
+
   return `Hi ${storeName}, I'd like to order:\n\n${lines.join("\n")}\n\nTotal: PKR ${total.toLocaleString()}`;
 }
