@@ -79,7 +79,7 @@ export function CartDrawer() {
             <p className="mt-1 text-[11px] text-muted-foreground">
               Each pair is one of a kind — we'll confirm it's still available on WhatsApp.
             </p>
-            
+            <a
               href={waLink}
               target="_blank"
               rel="noreferrer"

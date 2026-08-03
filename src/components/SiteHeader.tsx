@@ -60,7 +60,7 @@ export function SiteHeader() {
                 </span>
               )}
             </button>
-            
+            <a
               href={`https://wa.me/${store.whatsapp.replace(/[^0-9]/g, "")}`}
               target="_blank"
               rel="noreferrer"
