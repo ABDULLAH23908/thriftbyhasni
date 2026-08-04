@@ -177,7 +177,10 @@ export function ShoeDetailPage() {
             ) : (
               <>
                 <Button
-                  onClick={() => (inCart ? openCart() : addItem(product))}
+                  onClick={() => {
+                    addItem(product, { addOns: selectedAddOns });
+                    openCart();
+                  }}
                   size="lg"
                   className={`mt-4 w-full ${
                     inCart
