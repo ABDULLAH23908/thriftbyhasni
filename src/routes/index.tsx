@@ -3,7 +3,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProductCard } from "@/components/ProductCard";
 import { ReviewCarousel } from "@/components/ReviewCarousel";
-import { products, conditions, brands, store } from "@/data/products";
+import { conditions, brands, store } from "@/data/products";
+import { productStockQuery, useStockedProducts } from "@/lib/stock";
 import { seedReviews } from "@/data/reviews";
 import hero from "@/assets/hero.jpg";
 import shoes1 from "@/assets/shoes1.png.asset.json";
@@ -28,6 +29,12 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
+  errorComponent: () => (
+    <p className="p-10 text-center text-sm text-muted-foreground">
+      Could not load the catalog. Please refresh.
+    </p>
+  ),
   component: Index,
 });
 
@@ -38,6 +45,8 @@ const categoryTiles = [
 ] as const;
 
 function Index() {
+  const products = useStockedProducts();
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />

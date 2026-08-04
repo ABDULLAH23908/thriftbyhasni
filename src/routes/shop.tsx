@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ProductCard } from "@/components/ProductCard";
-import { products, conditions, brands } from "@/data/products";
+import { conditions, brands } from "@/data/products";
+import { productStockQuery, useStockedProducts } from "@/lib/stock";
 
 type ShopSearch = {
   category?: string | undefined;
@@ -32,6 +33,12 @@ export const Route = createFileRoute("/shop")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
+  errorComponent: () => (
+    <p className="p-10 text-center text-sm text-muted-foreground">
+      Could not load the catalog. Please refresh.
+    </p>
+  ),
   component: Shop,
 });
 
@@ -82,6 +89,7 @@ function FilterRow({
 
 function Shop() {
   const { category, condition, brand } = Route.useSearch();
+  const products = useStockedProducts();
 
   const filtered = products.filter(
     (p) =>
