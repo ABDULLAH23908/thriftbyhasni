@@ -6,6 +6,12 @@ export const listProducts = createServerFn({ method: "GET" }).handler(async () =
   return fetchAvailableProducts();
 });
 
+/** Public stock state used to grey out / hide sold pairs across the storefront. */
+export const listProductStock = createServerFn({ method: "GET" }).handler(async () => {
+  const { fetchProductStock } = await import("./catalog.server");
+  return fetchProductStock();
+});
+
 export const getProduct = createServerFn({ method: "GET" })
   .inputValidator((data) => z.object({ id: z.string().min(1).max(120) }).parse(data))
   .handler(async ({ data }) => {
