@@ -67,9 +67,13 @@ export function ShoeDetailPage() {
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
+  const selectedAddOns = selectedAccessories.flatMap((id) =>
+    ACCESSORY_LOOKUP[id] ? [ACCESSORY_LOOKUP[id]] : [],
+  );
+
   function handleBuyNow() {
     if (isSoldOut) return;
-    if (!inCart) addItem(product!);
+    addItem(product!, { addOns: selectedAddOns });
     navigate({ to: "/checkout" });
   }
 
@@ -173,7 +177,10 @@ export function ShoeDetailPage() {
             ) : (
               <>
                 <Button
-                  onClick={() => (inCart ? openCart() : addItem(product))}
+                  onClick={() => {
+                    addItem(product, { addOns: selectedAddOns });
+                    openCart();
+                  }}
                   size="lg"
                   className={`mt-4 w-full ${
                     inCart
