@@ -31,7 +31,12 @@ type CartAction =
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM":
-      if (state.items.some((i) => i.id === action.item.id)) return { ...state, isOpen: true };
+      if (state.items.some((i) => i.id === action.item.id))
+        return {
+          ...state,
+          items: state.items.map((i) => (i.id === action.item.id ? action.item : i)),
+          isOpen: true,
+        };
       return { ...state, items: [...state.items, action.item], isOpen: true };
     case "REMOVE_ITEM":
       return { ...state, items: state.items.filter((i) => i.id !== action.id) };
