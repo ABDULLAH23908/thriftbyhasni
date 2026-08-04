@@ -7,13 +7,19 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { ProductImageZoom } from "@/components/ProductImageZoom";
 import { SizeChart } from "@/components/SizeChart";
 import { AccessoriesPicker, accessoriesTotal } from "@/components/AccessoriesPicker";
-import { products } from "@/data/products";
+import { productStockQuery, useStockedProduct } from "@/lib/stock";
 import { accessories } from "@/data/accessories";
 import { useCart } from "@/lib/cart-context";
 
 const ACCESSORY_LOOKUP = Object.fromEntries(accessories.map((a) => [a.id, a]));
 
 export const Route = createFileRoute("/shoes/$id")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
+  errorComponent: () => (
+    <p className="p-10 text-center text-sm text-muted-foreground">
+      Could not load this pair. Please refresh.
+    </p>
+  ),
   component: ShoeDetailPage,
 });
 
@@ -32,7 +38,7 @@ function HighlightBox({ label, value }: { label: string; value: string }) {
 
 export function ShoeDetailPage() {
   const { id } = Route.useParams();
-  const product = products.find((p) => p.id === id);
+  const product = useStockedProduct(id);
 
   const [selectedAccessories, setSelectedAccessories] = useState<string[]>([]);
   const { addItem, isInCart, openCart } = useCart();
