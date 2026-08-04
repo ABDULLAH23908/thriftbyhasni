@@ -41,7 +41,9 @@ export function CartDrawer() {
             </div>
           ) : (
             <ul className="space-y-4">
-              {items.map((item) => (
+              {items.map((item) => {
+                const addOnsTotal = item.addOns?.reduce((s, a) => s + a.price, 0) ?? 0;
+                return (
                 <li key={item.id} className="flex gap-3 border-b border-border pb-4">
                   <img src={item.image} alt={item.name} className="h-20 w-20 shrink-0 object-cover" />
                   <div className="flex flex-1 flex-col">
@@ -49,8 +51,17 @@ export function CartDrawer() {
                     <p className="mt-1 text-xs text-muted-foreground">
                       {item.condition} · {item.size}
                     </p>
-                    <div className="mt-auto flex items-center justify-between">
-                      <span className="text-sm font-bold">PKR {item.price.toLocaleString()}</span>
+                    {item.addOns && item.addOns.length > 0 && (
+                      <ul className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">
+                        {item.addOns.map((a) => (
+                          <li key={a.id}>+ {a.name} (Rs {a.price.toLocaleString()})</li>
+                        ))}
+                      </ul>
+                    )}
+                    <div className="mt-auto flex items-center justify-between pt-2">
+                      <span className="text-sm font-bold">
+                        PKR {(item.price + addOnsTotal).toLocaleString()}
+                      </span>
                       <button
                         onClick={() => removeItem(item.id)}
                         aria-label="Remove from bag"
@@ -61,7 +72,8 @@ export function CartDrawer() {
                     </div>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           )}
         </div>
