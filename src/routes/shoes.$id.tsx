@@ -67,9 +67,9 @@ export function ShoeDetailPage() {
   const addOnsTotal = accessoriesTotal(selectedAccessories);
   const grandTotal = product.price + addOnsTotal;
 
-  const selectedAddOns = selectedAccessories
-    .map((id) => ACCESSORY_LOOKUP[id])
-    .filter(Boolean);
+  const selectedAddOns = selectedAccessories.flatMap((id) =>
+    ACCESSORY_LOOKUP[id] ? [ACCESSORY_LOOKUP[id]] : [],
+  );
 
   function handleBuyNow() {
     if (isSoldOut) return;
