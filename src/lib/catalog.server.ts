@@ -60,7 +60,7 @@ export function mapProduct(row: Row): CatalogProduct {
 }
 
 const COLUMNS =
-  "id, name, brand, category, price, old_price, condition, sizes, image, images, color, status, created_at";
+  "id, name, brand, category, price, old_price, condition, sizes, image, images, color, status, sold_at, created_at";
 
 export async function fetchAvailableProducts(): Promise<CatalogProduct[]> {
   const supabase = createPublicClient();
@@ -71,6 +71,20 @@ export async function fetchAvailableProducts(): Promise<CatalogProduct[]> {
     .order("created_at", { ascending: true });
   if (error) throw error;
   return (data ?? []).map(mapProduct);
+}
+
+export type ProductStock = { id: string; status: string; soldAt: string | null };
+
+/**
+ * Stock state for every pair the public policy allows: available, reserved by a
+ * pending order, or sold within the last 24 hours. Pairs sold longer than 24
+ * hours ago are filtered out by the policy, so they simply stop appearing.
+ */
+export async function fetchProductStock(): Promise<ProductStock[]> {
+  const supabase = createPublicClient();
+  const { data, error } = await supabase.from("products").select("id, status, sold_at");
+  if (error) throw error;
+  return (data ?? []).map((row) => ({ id: row.id, status: row.status, soldAt: row.sold_at }));
 }
 
 export async function fetchProductById(id: string): Promise<CatalogProduct | null> {
