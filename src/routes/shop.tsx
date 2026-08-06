@@ -54,7 +54,7 @@ function FilterRow({
 }: {
   title: string;
   values: string[];
-  active?: string;
+  active?: string | undefined;
   keyName: keyof ShopSearch;
 }) {
   return (
