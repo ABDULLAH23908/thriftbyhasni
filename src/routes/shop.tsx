@@ -20,18 +20,20 @@ export const Route = createFileRoute("/shop")({
 
   head: () => ({
     meta: [
-      { title: "Shop Thrifted Sneakers — TBH Thrift" },
+      { title: "Shop Thrifted Sneakers — Thrift by Hasni" },
       {
         name: "description",
         content:
           "Browse every graded thrifted sneaker in stock. Filter by category, condition and brand, then order the exact pair on WhatsApp.",
       },
-      { property: "og:title", content: "Shop Thrifted Sneakers — TBH Thrift" },
+      { property: "og:title", content: "Shop Thrifted Sneakers — Thrift by Hasni" },
       {
         property: "og:description",
         content: "Filter graded thrifted sneakers by category, condition and brand.",
       },
+      { property: "og:url", content: "https://thriftbyhasni.lovable.app/shop" },
     ],
+    links: [{ rel: "canonical", href: "https://thriftbyhasni.lovable.app/shop" }],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
   errorComponent: () => (
@@ -52,7 +54,7 @@ function FilterRow({
 }: {
   title: string;
   values: string[];
-  active?: string;
+  active?: string | undefined;
   keyName: keyof ShopSearch;
 }) {
   return (
@@ -102,7 +104,7 @@ function Shop() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-4 py-12">
-        <h1 className="text-3xl font-bold uppercase tracking-tight">Shop all pairs</h1>
+        <h1 className="text-3xl font-bold uppercase tracking-tight">Shop Thrifted Sneakers</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {filtered.length} pair{filtered.length === 1 ? "" : "s"} in stock right now.
         </p>

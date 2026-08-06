@@ -10,11 +10,72 @@ import { AccessoriesPicker, accessoriesTotal } from "@/components/AccessoriesPic
 import { productStockQuery, useStockedProduct } from "@/lib/stock";
 import { accessories } from "@/data/accessories";
 import { useCart } from "@/lib/cart-context";
+import { products, store } from "@/data/products";
 
 const ACCESSORY_LOOKUP = Object.fromEntries(accessories.map((a) => [a.id, a]));
 
+const SITE_URL = "https://thriftbyhasni.lovable.app";
+
 export const Route = createFileRoute("/shoes/$id")({
   loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
+  head: ({ params }) => {
+    const product = products.find((p) => p.id === params.id);
+    const url = `${SITE_URL}/shoes/${params.id}`;
+
+    if (!product) {
+      return {
+        meta: [
+          { title: `Pair not found — ${store.name}` },
+          { name: "description", content: "This listing may have sold or been removed." },
+          { name: "robots", content: "noindex" },
+        ],
+        links: [{ rel: "canonical", href: url }],
+      };
+    }
+
+    const title = `${product.name} — ${store.name}`.slice(0, 60);
+    const description = `Buy the ${product.name} in ${product.condition} condition for Rs ${product.price}. Hand-graded thrifted ${product.brand} sneakers, sizes ${product.sizes.join(", ")}.`.slice(0, 158);
+    const image = product.image.startsWith("http") ? product.image : `${SITE_URL}${product.image}`;
+
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            brand: { "@type": "Brand", name: product.brand },
+            image: [image],
+            description,
+            itemCondition: "https://schema.org/UsedCondition",
+            offers: {
+              "@type": "Offer",
+              url,
+              price: product.price,
+              priceCurrency: "PKR",
+              availability: product.sold
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/InStock",
+              seller: { "@type": "Organization", name: store.name },
+            },
+          }),
+        },
+      ],
+    };
+  },
   errorComponent: () => (
     <p className="p-10 text-center text-sm text-muted-foreground">
       Could not load this pair. Please refresh.

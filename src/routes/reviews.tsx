@@ -10,12 +10,21 @@ import { addReview, loadReviews, seedReviews, type Review } from "@/data/reviews
 export const Route = createFileRoute("/reviews")({
   head: () => ({
     meta: [
-      { title: "Customer Reviews — TBH Thrift" },
+      { title: "Customer Reviews — Thrift by Hasni" },
       {
         name: "description",
-        content: "Read what customers are saying about TBH Thrift, or leave your own review.",
+        content:
+          "Real reviews from Thrift by Hasni customers on pair quality, condition grading and delivery — and leave your own.",
       },
+      { property: "og:title", content: "Customer Reviews — Thrift by Hasni" },
+      {
+        property: "og:description",
+        content:
+          "See what buyers say about our graded thrifted sneakers, then add your own review.",
+      },
+      { property: "og:url", content: "https://thriftbyhasni.lovable.app/reviews" },
     ],
+    links: [{ rel: "canonical", href: "https://thriftbyhasni.lovable.app/reviews" }],
   }),
   component: ReviewsPage,
 });
@@ -46,7 +55,7 @@ function ReviewsPage() {
               Customer reviews
             </p>
             <h1 className="mt-2 text-3xl font-bold uppercase tracking-tight sm:text-4xl">
-              What people are saying
+              Customer Reviews for Thrift by Hasni
             </h1>
           </div>
           <ReviewForm onSubmit={handleSubmit} />

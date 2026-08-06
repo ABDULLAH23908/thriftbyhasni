@@ -27,6 +27,31 @@ export const Route = createFileRoute("/")({
         content:
           "Graded thrifted sneakers at honest prices. Browse new arrivals, shop by condition and order on WhatsApp.",
       },
+      { property: "og:url", content: "https://thriftbyhasni.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://thriftbyhasni.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: store.name,
+          image: "https://thriftbyhasni.lovable.app/favicon.png",
+          url: "https://thriftbyhasni.lovable.app/",
+          telephone: store.phone,
+          email: store.email,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: store.address,
+            addressCountry: "PK",
+          },
+          hasMap: store.mapsUrl,
+          sameAs: [store.instagram],
+          openingHours: "Mo-Su 10:00-20:00",
+          priceRange: "Rs 1,500 - Rs 5,000",
+        }),
+      },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(productStockQuery),
