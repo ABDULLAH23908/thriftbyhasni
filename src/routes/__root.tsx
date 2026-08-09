@@ -14,8 +14,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-import logoWhite from "@/assets/logo-white.png";
-import logoBlue from "@/assets/logo.png";
+import logoWhite from "@/assets/logo-white.png.asset.json";
+import logoBlue from "@/assets/logo.png.asset.json";
 
 function RootShell({ children }: { children: ReactNode }) {
   const { queryClient } = Route.useRouteContext();

@@ -5,12 +5,12 @@
  *   - a full URL ("https://…") or a site path ("/uploads/x.jpg"), used as-is, or
  *   - one of the keys below, e.g. "shoes7" — handy for photos stored in the app.
  */
-import shoes1 from "@/assets/shoes1.png";
-import shoes2 from "@/assets/Shoes2.jpeg";
-import shoes3 from "@/assets/shoes3.jpeg";
-import shoes4 from "@/assets/shoes4.jpeg";
-import shoes5 from "@/assets/shoes5.jpeg";
-import shoes6 from "@/assets/shoes6.jpeg";
+import shoes1 from "@/assets/shoes1.png.asset.json";
+import shoes2 from "@/assets/Shoes2.jpeg.asset.json";
+import shoes3 from "@/assets/shoes3.jpeg.asset.json";
+import shoes4 from "@/assets/shoes4.jpeg.asset.json";
+import shoes5 from "@/assets/shoes5.jpeg.asset.json";
+import shoes6 from "@/assets/shoes6.jpeg.asset.json";
 import shoes7 from "@/assets/Shoes7.jpeg";
 import shoes8 from "@/assets/Shoes8.jpeg";
 import shoes9 from "@/assets/Shoes9.jpeg";
