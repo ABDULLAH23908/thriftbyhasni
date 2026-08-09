@@ -9,6 +9,8 @@ import { getCartProducts } from "@/lib/catalog.functions";
 import { placeOrder } from "@/lib/orders.functions";
 import { resolveProductImage } from "@/data/product-images";
 import { payment } from "@/data/payment";
+import { buildOrderWhatsAppUrl, WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
+
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
