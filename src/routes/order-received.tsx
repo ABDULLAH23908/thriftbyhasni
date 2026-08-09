@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { CheckCircle2 } from "lucide-react";
@@ -5,6 +6,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { payment } from "@/data/payment";
 import { store } from "@/data/products";
+import { WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
+
 
 export const Route = createFileRoute("/order-received")({
   validateSearch: z.object({ id: z.string().optional() }),
@@ -27,6 +30,15 @@ export const Route = createFileRoute("/order-received")({
 
 function OrderReceived() {
   const { id } = Route.useSearch();
+  const [waUrl, setWaUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      setWaUrl(sessionStorage.getItem(WHATSAPP_PENDING_KEY));
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,9 +55,27 @@ function OrderReceived() {
             Order reference: {id.slice(0, 8)}
           </p>
         )}
+        {waUrl && (
+          <div className="mt-8 border border-border bg-secondary/40 p-5">
+            <p className="text-xs font-bold uppercase tracking-[0.2em]">Confirm on WhatsApp</p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              A WhatsApp chat with your order details should have opened. If it didn&apos;t, tap
+              below and press send.
+            </p>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-4 inline-block bg-highlight px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-highlight-foreground"
+            >
+              Send order details
+            </a>
+          </div>
+        )}
         <p className="mt-6 text-xs text-muted-foreground">
           Questions? Call {store.phone} or message us on WhatsApp.
         </p>
+
         <Link
           to="/shop"
           className="mt-8 inline-block bg-brand px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-brand-foreground"

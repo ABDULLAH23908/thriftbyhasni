@@ -9,6 +9,8 @@ import { getCartProducts } from "@/lib/catalog.functions";
 import { placeOrder } from "@/lib/orders.functions";
 import { resolveProductImage } from "@/data/product-images";
 import { payment } from "@/data/payment";
+import { buildOrderWhatsAppUrl, WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
+
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -118,10 +120,35 @@ function Checkout() {
       });
 
       if (result.ok) {
+        const waUrl = buildOrderWhatsAppUrl({
+          orderId: result.orderId,
+          ...form,
+          subtotal,
+          total,
+          items: available.map((p) => {
+            const cartItem = items.find((i) => i.id === p.id);
+            const addOns = cartItem?.addOns ?? [];
+            return {
+              name: p.name,
+              size: cartItem?.size ?? p.sizes[0] ?? "",
+              condition: p.condition,
+              price: p.price + addOns.reduce((sum, a) => sum + a.price, 0),
+              addOns,
+            };
+          }),
+        });
+        try {
+          sessionStorage.setItem(WHATSAPP_PENDING_KEY, waUrl);
+        } catch {
+          /* storage unavailable */
+        }
+        // Opened inside the submit gesture so the browser doesn't block it.
+        window.open(waUrl, "_blank", "noopener,noreferrer");
         clearCart();
         navigate({ to: "/order-received", search: { id: result.orderId } });
         return;
       }
+
 
       if (result.error === "sold_out") {
         setMessage("Sorry, this pair was just sold. Taking you back to the shop…");
