@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
-import logoWhite from "@/assets/logo-white.png.asset.json";
+import logoWhite from "@/assets/logo-white.png";
 import { announcement, store } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 
