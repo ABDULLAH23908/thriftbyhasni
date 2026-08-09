@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { store, brands } from "@/data/products";
 
 export function SiteFooter() {
