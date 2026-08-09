@@ -7,9 +7,9 @@ import { conditions, brands, store } from "@/data/products";
 import { productStockQuery, useStockedProducts } from "@/lib/stock";
 import { seedReviews } from "@/data/reviews";
 import hero from "@/assets/hero.jpg";
-import shoes1 from "@/assets/shoes1.png.asset.json";
-import shoes3 from "@/assets/shoes3.jpeg.asset.json";
-import shoes6 from "@/assets/shoes6.jpeg.asset.json";
+import shoes1 from "@/assets/shoes1.png";
+import shoes3 from "@/assets/shoes3.jpeg";
+import shoes6 from "@/assets/shoes6.jpeg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
