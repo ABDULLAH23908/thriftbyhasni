@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { CheckCircle2 } from "lucide-react";
@@ -5,6 +6,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { payment } from "@/data/payment";
 import { store } from "@/data/products";
+import { WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
+
 
 export const Route = createFileRoute("/order-received")({
   validateSearch: z.object({ id: z.string().optional() }),
