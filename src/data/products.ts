@@ -14,15 +14,15 @@
  *  sold   -> true hides the "Add to cart" style CTA and marks it sold
  */
 
-import shoes1 from "@/assets/shoes1.png.asset.json";
-import shoes2 from "@/assets/Shoes2.jpeg.asset.json";
-import shoes3 from "@/assets/shoes3.jpeg.asset.json";
-import shoes4 from "@/assets/shoes4.jpeg.asset.json";
-import shoes5 from "@/assets/shoes5.jpeg.asset.json";
-import shoes6 from "@/assets/shoes6.jpeg.asset.json";
+import shoes1 from "@/assets/shoes1.png";
+import shoes2 from "@/assets/Shoes2.jpeg";
+import shoes3 from "@/assets/shoes3.jpeg";
+import shoes4 from "@/assets/shoes4.jpeg";
+import shoes5 from "@/assets/shoes5.jpeg";
+import shoes6 from "@/assets/shoes6.jpeg";
 
 // New batch — uploaded directly via GitHub, so these are plain image
-// imports (no .asset.json wrapper, no .url — Vite gives the URL directly).
+// imports (no  wrapper, no .url — Vite gives the URL directly).
 import shoes7 from "@/assets/Shoes7.jpeg";
 import shoes8 from "@/assets/Shoes8.jpeg";
 import shoes9 from "@/assets/Shoes9.jpeg";
