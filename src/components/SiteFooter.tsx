@@ -1,4 +1,4 @@
-import logo from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { store, brands } from "@/data/products";
 
 export function SiteFooter() {
@@ -6,7 +6,7 @@ export function SiteFooter() {
     <footer className="bg-highlight text-highlight-foreground">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <img src={logo.url} alt={`${store.name} logo`} className="h-8 w-auto" />
+          <img src={logo} alt={`${store.name} logo`} className="h-8 w-auto" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed">
             Hand-picked thrifted sneakers, graded honestly and priced fairly. One pair, one owner,
             one price.

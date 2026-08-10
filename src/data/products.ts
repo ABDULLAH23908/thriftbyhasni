@@ -14,12 +14,12 @@
  *  sold   -> true hides the "Add to cart" style CTA and marks it sold
  */
 
-import shoes1 from "@/assets/shoes1.png.asset.json";
-import shoes2 from "@/assets/Shoes2.jpeg.asset.json";
-import shoes3 from "@/assets/shoes3.jpeg.asset.json";
-import shoes4 from "@/assets/shoes4.jpeg.asset.json";
-import shoes5 from "@/assets/shoes5.jpeg.asset.json";
-import shoes6 from "@/assets/shoes6.jpeg.asset.json";
+import shoes1 from "@/assets/shoes1.png";
+import shoes2 from "@/assets/Shoes2.jpeg";
+import shoes3 from "@/assets/shoes3.jpeg";
+import shoes4 from "@/assets/shoes4.jpeg";
+import shoes5 from "@/assets/shoes5.jpeg";
+import shoes6 from "@/assets/shoes6.jpeg";
 
 // New batch — uploaded directly via GitHub, so these are plain image
 // imports (no .asset.json wrapper, no .url — Vite gives the URL directly).
@@ -61,7 +61,7 @@ export const products: Product[] = [
     oldPrice: 4000,
     condition: "Premium+",
     sizes: ["PAK 12", "EUR 47"],
-    image: shoes1.url,
+    image: shoes1,
   },
   {
     id: "af1-midnight-navy",
@@ -72,7 +72,7 @@ export const products: Product[] = [
     oldPrice: 4000,
     condition: "Premium",
     sizes: ["5.5 UK", "38.5 EUR"],
-    image: shoes2.url,
+    image: shoes2,
   },
   {
     id: "af1-sunflower",
@@ -83,7 +83,7 @@ export const products: Product[] = [
     oldPrice: 3000,
     condition: "Premium",
     sizes: ["6.5 US", "39 EUR"],
-    image: shoes3.url,
+    image: shoes3,
   },
   {
     id: "af1-floral-swoosh",
@@ -94,7 +94,7 @@ export const products: Product[] = [
     oldPrice: 3000,
     condition: "Excellence",
     sizes: ["6 UK", "8 US", "39 EUR"],
-    image: shoes4.url,
+    image: shoes4,
   },
   {
     id: "af1-grey-suede",
@@ -105,7 +105,7 @@ export const products: Product[] = [
     oldPrice: 3000,
     condition: "Premium+",
     sizes: ["5 UK", "7 US", "38 EUR"],
-    image: shoes5.url,
+    image: shoes5,
   },
   {
     id: "af1-just-do-more",
@@ -116,7 +116,7 @@ export const products: Product[] = [
     oldPrice: 3000,
     condition: "Premium",
     sizes: ["6 UK", "8 US", "39 EUR"],
-    image: shoes6.url,
+    image: shoes6,
   },
 
   // ---------- New batch (from WhatsApp catalog) ----------
