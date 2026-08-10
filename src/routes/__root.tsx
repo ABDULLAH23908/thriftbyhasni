@@ -14,8 +14,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-import logoWhite from "@/assets/logo-white.png.asset.json";
-import logoBlue from "@/assets/logo.png.asset.json";
+import logoWhite from "@/assets/logo-white.png";
+import logoBlue from "@/assets/logo.png";
 
 function RootShell({ children }: { children: ReactNode }) {
   const { queryClient } = Route.useRouteContext();
@@ -116,7 +116,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Graded, hand-picked thrifted sneakers at honest prices.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: logoBlue.url },
+      { property: "og:image", content: logoBlue },
       { property: "og:image:width", content: "512" },
       { property: "og:image:height", content: "512" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -133,19 +133,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       /* Blue logo for Light theme (Browser tabs & Google Search) */
       {
         rel: "icon",
-        href: logoBlue.url,
+        href: logoBlue,
         type: "image/png",
         media: "(prefers-color-scheme: light)",
       },
       /* White logo for Dark theme (Browser tabs & Google Search) */
       {
         rel: "icon",
-        href: logoWhite.url,
+        href: logoWhite,
         type: "image/png",
         media: "(prefers-color-scheme: dark)",
       },
       /* Fallback favicon */
-      { rel: "icon", href: logoBlue.url, type: "image/png" },
+      { rel: "icon", href: logoBlue, type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

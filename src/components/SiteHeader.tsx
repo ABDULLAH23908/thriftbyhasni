@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
-import logoWhite from "@/assets/logo-white.png.asset.json";
+import logoWhite from "@/assets/logo-white.png";
 import { announcement, store } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 
@@ -15,7 +15,7 @@ export function SiteHeader() {
       <div className="bg-brand text-brand-foreground">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
           <Link to="/" className="shrink-0">
-            <img src={logoWhite.url} alt={`${store.name} logo`} className="h-7 w-auto" />
+            <img src={logoWhite} alt={`${store.name} logo`} className="h-7 w-auto" />
           </Link>
           <nav className="hidden items-center gap-6 text-xs font-semibold uppercase tracking-widest md:flex">
             <Link to="/shop" className="opacity-80 transition-opacity hover:opacity-100">
