@@ -118,17 +118,20 @@ export const placeOrder = createServerFn({ method: "POST" })
       .map((i) => `${i.productId}${i.size ? ` (size ${i.size})` : ""}`)
       .join(", ");
 
-    // Fire-and-forget — don't let a notification failure block the order
-    fetch("https://script.google.com/macros/s/AKfycbzMwG601UyA3eZvuQ1otRviVdayr_8INP52MCoYsV26BMy9ecCAJc1HA0rR-KVQX5CD/exec", {
-      method: "POST",
-      body: JSON.stringify({
-        name: customerName,
-        phone,
-        items: itemsSummary,
-        address: `${address}, ${city}`,
-        notes: notes || "—",
-      }),
-    }).catch((err) => console.error("Order notification failed:", err));
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbwXOpwTwrTjNDRdJY9OAPPB9LtN9_M-qw_EvQ1SfGL4kAsBxRS-aYgB2KbVEnZiz5E8/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          name: customerName,
+          phone,
+          items: itemsSummary,
+          address: `${address}, ${city}`,
+          notes: notes || "—",
+        }),
+      });
+    } catch (err) {
+      console.error("Order notification failed:", err);
+    }
 
     return { ok: true, orderId: payload.order_id!, total: Number(payload.total ?? 0) };
   });
