@@ -128,6 +128,9 @@ export const ensureAdminAccount = createServerFn({ method: "POST" }).handler(asy
       return { ok: false as const, reason: "create_failed" as const };
     }
     userId = created.user.id;
+  } else {
+    // FORCE UPDATE SUPABASE PASSWORD TO MATCH CLOUDFLARE SECRETS
+    await supabaseAdmin.auth.admin.updateUserById(userId, { password });
   }
 
   await supabaseAdmin.from("user_roles").upsert(
