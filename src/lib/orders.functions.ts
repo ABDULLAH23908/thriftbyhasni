@@ -114,5 +114,21 @@ export const placeOrder = createServerFn({ method: "POST" })
       };
     }
 
+    const itemsSummary = data.items
+      .map((i) => `${i.productId}${i.size ? ` (size ${i.size})` : ""}`)
+      .join(", ");
+
+    // Fire-and-forget — don't let a notification failure block the order
+    fetch("https://script.google.com/macros/s/AKfycbzMwG601UyA3eZvuQ1otRviVdayr_8INP52MCoYsV26BMy9ecCAJc1HA0rR-KVQX5CD/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        name: customerName,
+        phone,
+        items: itemsSummary,
+        address: `${address}, ${city}`,
+        notes: notes || "—",
+      }),
+    }).catch((err) => console.error("Order notification failed:", err));
+
     return { ok: true, orderId: payload.order_id!, total: Number(payload.total ?? 0) };
   });
