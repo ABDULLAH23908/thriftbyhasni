@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { listOrders, updateOrderState } from "@/lib/admin.functions";
+import { getPaymentMethod } from "@/data/payment";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
   head: () => ({
@@ -23,6 +24,12 @@ const statusTone: Record<string, string> = {
   cancelled: "bg-muted text-muted-foreground",
   processing: "bg-secondary text-secondary-foreground",
   fulfilled: "bg-brand text-brand-foreground",
+};
+
+const methodTone: Record<string, string> = {
+  cod: "bg-secondary text-secondary-foreground",
+  full: "bg-brand text-brand-foreground",
+  ceo: "bg-highlight text-highlight-foreground",
 };
 
 function AdminOrders() {
@@ -108,6 +115,9 @@ function AdminOrders() {
                     Pairs Rs {order.subtotal.toLocaleString()} + delivery Rs{" "}
                     {order.delivery_fee.toLocaleString()}
                   </p>
+                  <p className="text-xs font-semibold text-brand">
+                    Advance Rs {order.advance_amount.toLocaleString()}
+                  </p>
                 </div>
               </div>
 
@@ -126,6 +136,13 @@ function AdminOrders() {
               </ul>
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
+                <span
+                  className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
+                    methodTone[order.payment_method] ?? "bg-muted"
+                  }`}
+                >
+                  {getPaymentMethod(order.payment_method as "cod" | "full" | "ceo").label}
+                </span>
                 <span
                   className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${
                     statusTone[order.payment_status] ?? "bg-muted"

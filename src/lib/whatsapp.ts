@@ -1,5 +1,5 @@
 import { store } from "@/data/products";
-import { payment } from "@/data/payment";
+import { getPaymentMethod, type PaymentMethodId } from "@/data/payment";
 
 export type WhatsAppOrderLine = {
   name: string;
@@ -20,6 +20,8 @@ export type WhatsAppOrder = {
   items: WhatsAppOrderLine[];
   subtotal: number;
   total: number;
+  paymentMethod: PaymentMethodId;
+  advanceAmount: number;
 };
 
 export const WHATSAPP_PENDING_KEY = "tbh-pending-whatsapp";
@@ -41,9 +43,11 @@ export function buildOrderMessage(order: WhatsAppOrder): string {
       lines.push(`   + ${addOn.name} — Rs ${addOn.price.toLocaleString()}`);
     });
   });
+  const method = getPaymentMethod(order.paymentMethod);
   lines.push("");
+  lines.push(`Payment method: ${method.label}`);
   lines.push(`Subtotal: Rs ${order.subtotal.toLocaleString()}`);
-  lines.push(`Delivery advance (NayaPay): Rs ${payment.deliveryFee.toLocaleString()}`);
+  lines.push(`Advance paid now (NayaPay): Rs ${order.advanceAmount.toLocaleString()}`);
   lines.push(`Total: Rs ${order.total.toLocaleString()}`);
   lines.push(`Advance reference: ${order.advanceReference}`);
   lines.push("");

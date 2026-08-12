@@ -8,9 +8,14 @@ import { useCart } from "@/lib/cart-context";
 import { getCartProducts } from "@/lib/catalog.functions";
 import { placeOrder } from "@/lib/orders.functions";
 import { resolveProductImage } from "@/data/product-images";
-import { payment } from "@/data/payment";
+import {
+  payment,
+  paymentMethods,
+  advanceAmountFor,
+  deliveryFeeFor,
+  type PaymentMethodId,
+} from "@/data/payment";
 import { buildOrderWhatsAppUrl, WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
-
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -19,12 +24,13 @@ export const Route = createFileRoute("/checkout")({
       {
         name: "description",
         content:
-          "Confirm your thrifted sneakers, pay the Rs 350 delivery advance via NayaPay and pay the rest cash on delivery.",
+          "Confirm your thrifted sneakers — choose cash on delivery, pay in full, or CEO delivery, and confirm with a NayaPay advance.",
       },
       { property: "og:title", content: "Checkout — Thrift by Hasni" },
       {
         property: "og:description",
-        content: "Cash on delivery with a Rs 350 NayaPay advance to confirm your order.",
+        content:
+          "Cash on delivery, full prepayment, or CEO delivery — confirm with a NayaPay advance.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -65,7 +71,11 @@ function Checkout() {
     return sum + p.price + addOnsTotal;
   }, 0);
 
-  const total = subtotal + payment.deliveryFee;
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId>("cod");
+  const deliveryFee = deliveryFeeFor(paymentMethod);
+  const total = subtotal + deliveryFee;
+  const advanceAmount = advanceAmountFor(paymentMethod, subtotal);
+  const remainingOnDelivery = total - advanceAmount;
 
   const [form, setForm] = useState({
     customerName: "",
@@ -79,8 +89,9 @@ function Checkout() {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+  const set =
+    (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -88,8 +99,11 @@ function Checkout() {
     setBusy(true);
     setMessage("");
 
-    let proofPayload: { name: string; type: "image/jpeg" | "image/png" | "image/webp"; base64: string } | null =
-      null;
+    let proofPayload: {
+      name: string;
+      type: "image/jpeg" | "image/png" | "image/webp";
+      base64: string;
+    } | null = null;
     if (proof) {
       if (!["image/jpeg", "image/png", "image/webp"].includes(proof.type)) {
         setBusy(false);
@@ -107,6 +121,7 @@ function Checkout() {
       const result = await submitOrder({
         data: {
           ...form,
+          paymentMethod,
           items: available.map((p) => {
             const cartItem = items.find((i) => i.id === p.id);
             return {
@@ -125,6 +140,8 @@ function Checkout() {
           ...form,
           subtotal,
           total,
+          paymentMethod,
+          advanceAmount,
           items: available.map((p) => {
             const cartItem = items.find((i) => i.id === p.id);
             const addOns = cartItem?.addOns ?? [];
@@ -145,10 +162,12 @@ function Checkout() {
         // Opened inside the submit gesture so the browser doesn't block it.
         window.open(waUrl, "_blank", "noopener,noreferrer");
         clearCart();
-        navigate({ to: "/order-received", search: { id: result.orderId } });
+        navigate({
+          to: "/order-received",
+          search: { id: result.orderId, method: paymentMethod, advance: advanceAmount },
+        });
         return;
       }
-
 
       if (result.error === "sold_out") {
         setMessage("Sorry, this pair was just sold. Taking you back to the shop…");
@@ -246,14 +265,56 @@ function Checkout() {
                 </div>
               )}
 
+              {/* Payment method selector */}
+              <div className="mt-6">
+                <p className="text-xs font-bold uppercase tracking-[0.2em]">
+                  How do you want to pay?
+                </p>
+                <div className="mt-3 space-y-2">
+                  {paymentMethods.map((m) => {
+                    const selected = paymentMethod === m.id;
+                    return (
+                      <label
+                        key={m.id}
+                        className={`flex cursor-pointer items-start gap-3 border p-3 text-sm transition-colors ${
+                          selected
+                            ? "border-brand bg-brand/5"
+                            : "border-border hover:border-foreground/40"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value={m.id}
+                          checked={selected}
+                          onChange={() => setPaymentMethod(m.id)}
+                          className="mt-1 accent-brand"
+                        />
+                        <span>
+                          <span className="flex items-center gap-2">
+                            <span className="font-bold">{m.label}</span>
+                            <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+                              {m.tagline}
+                            </span>
+                          </span>
+                          <span className="mt-0.5 block text-xs text-muted-foreground">
+                            {m.description}
+                          </span>
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
               <dl className="mt-6 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <dt>Subtotal (pairs & add-ons)</dt>
                   <dd className="font-semibold">Rs {subtotal.toLocaleString()}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt>Delivery fee</dt>
-                  <dd className="font-semibold">Rs {payment.deliveryFee.toLocaleString()}</dd>
+                  <dt>{paymentMethod === "ceo" ? "CEO delivery fee" : "Delivery fee"}</dt>
+                  <dd className="font-semibold">Rs {deliveryFee.toLocaleString()}</dd>
                 </div>
                 <div className="flex justify-between border-t border-border pt-2 text-base font-bold uppercase tracking-widest">
                   <dt>Total</dt>
@@ -263,17 +324,32 @@ function Checkout() {
 
               <div className="mt-6 border border-border bg-secondary/40 p-5 text-sm">
                 <p className="text-xs font-bold uppercase tracking-[0.2em]">
-                  Cash on delivery — how it works
+                  {paymentMethod === "full"
+                    ? "Full payment — how it works"
+                    : paymentMethod === "ceo"
+                      ? "CEO delivery — how it works"
+                      : "Cash on delivery — how it works"}
                 </p>
                 <p className="mt-3">
-                  The <strong>Rs {payment.deliveryFee}</strong> delivery fee is paid in advance via
-                  NayaPay to confirm your order. The remaining amount (
-                  <strong>Rs {subtotal.toLocaleString()}</strong>) is paid in cash when your order
-                  arrives.
+                  {paymentMethod === "full" ? (
+                    <>
+                      Pay the full <strong>Rs {total.toLocaleString()}</strong> via NayaPay now to
+                      confirm your order. Nothing to pay when it arrives.
+                    </>
+                  ) : (
+                    <>
+                      The <strong>Rs {advanceAmount.toLocaleString()}</strong>{" "}
+                      {paymentMethod === "ceo" ? "CEO delivery fee" : "delivery fee"} is paid in
+                      advance via NayaPay to confirm your order. The remaining amount (
+                      <strong>Rs {remainingOnDelivery.toLocaleString()}</strong>) is paid in cash
+                      when your order arrives
+                      {paymentMethod === "ceo" ? " — by the CEO, in person" : ""}.
+                    </>
+                  )}
                 </p>
                 <div className="mt-4 border-t border-border pt-3">
                   <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    Send Rs {payment.deliveryFee} to
+                    Send Rs {advanceAmount.toLocaleString()} to
                   </p>
                   <p className="mt-1 font-bold">NayaPay {payment.nayaPayNumber}</p>
                   <p className="text-xs text-muted-foreground">{payment.nayaPayAccountName}</p>
@@ -312,7 +388,10 @@ function Checkout() {
                 ))}
 
                 <div>
-                  <label htmlFor="address" className="text-[11px] font-bold uppercase tracking-widest">
+                  <label
+                    htmlFor="address"
+                    className="text-[11px] font-bold uppercase tracking-widest"
+                  >
                     Full delivery address
                   </label>
                   <textarea
@@ -327,7 +406,10 @@ function Checkout() {
                 </div>
 
                 <div>
-                  <label htmlFor="notes" className="text-[11px] font-bold uppercase tracking-widest">
+                  <label
+                    htmlFor="notes"
+                    className="text-[11px] font-bold uppercase tracking-widest"
+                  >
                     Notes (optional)
                   </label>
                   <textarea
@@ -353,13 +435,16 @@ function Checkout() {
                     maxLength={120}
                     value={form.advanceReference}
                     onChange={set("advanceReference")}
-                    placeholder="After sending Rs 350"
+                    placeholder={`After sending Rs ${advanceAmount.toLocaleString()}`}
                     className="mt-1 w-full border border-border bg-card px-3 py-2 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="proof" className="text-[11px] font-bold uppercase tracking-widest">
+                  <label
+                    htmlFor="proof"
+                    className="text-[11px] font-bold uppercase tracking-widest"
+                  >
                     Payment screenshot (optional)
                   </label>
                   <input
@@ -381,8 +466,8 @@ function Checkout() {
                   {busy ? "Placing order…" : `Place order · Rs ${total.toLocaleString()}`}
                 </button>
                 <p className="text-[11px] text-muted-foreground">
-                  We confirm your Rs {payment.deliveryFee} advance manually, then reach out on
-                  WhatsApp or phone.
+                  We confirm your Rs {advanceAmount.toLocaleString()} advance manually, then reach
+                  out on WhatsApp or phone.
                 </p>
               </form>
             </section>

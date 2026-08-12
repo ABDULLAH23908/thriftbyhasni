@@ -4,19 +4,23 @@ import { z } from "zod";
 import { CheckCircle2 } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { payment } from "@/data/payment";
+import { getPaymentMethod } from "@/data/payment";
 import { store } from "@/data/products";
 import { WHATSAPP_PENDING_KEY } from "@/lib/whatsapp";
 
-
 export const Route = createFileRoute("/order-received")({
-  validateSearch: z.object({ id: z.string().optional() }),
+  validateSearch: z.object({
+    id: z.string().optional(),
+    method: z.enum(["cod", "full", "ceo"]).optional(),
+    advance: z.coerce.number().optional(),
+  }),
   head: () => ({
     meta: [
       { title: "Order Received — Thrift by Hasni" },
       {
         name: "description",
-        content: "Your thrift order is in. We'll confirm your NayaPay advance and reach out shortly.",
+        content:
+          "Your thrift order is in. We'll confirm your NayaPay advance and reach out shortly.",
       },
       { property: "og:title", content: "Order Received — Thrift by Hasni" },
       { property: "og:description", content: "Your order is in — we'll confirm shortly." },
@@ -29,7 +33,9 @@ export const Route = createFileRoute("/order-received")({
 });
 
 function OrderReceived() {
-  const { id } = Route.useSearch();
+  const { id, method, advance } = Route.useSearch();
+  const paymentMethod = getPaymentMethod(method ?? "cod");
+  const advanceAmount = advance ?? 0;
   const [waUrl, setWaUrl] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,9 +53,14 @@ function OrderReceived() {
         <CheckCircle2 className="mx-auto h-12 w-12 text-brand" />
         <h1 className="mt-6 text-3xl font-bold uppercase tracking-tight">Order received</h1>
         <p className="mt-4 text-sm text-muted-foreground">
-          We&apos;ll confirm your Rs {payment.deliveryFee} payment and reach out on WhatsApp or phone
-          shortly.
+          We&apos;ll confirm your {advanceAmount > 0 ? `Rs ${advanceAmount.toLocaleString()} ` : ""}
+          {paymentMethod.label.toLowerCase()} payment and reach out on WhatsApp or phone shortly.
         </p>
+        {paymentMethod.id === "ceo" && (
+          <p className="mt-2 text-xs font-semibold text-brand">
+            Yes, really — the CEO is personally handling this delivery. 🚗
+          </p>
+        )}
         {id && (
           <p className="mt-4 text-xs uppercase tracking-widest text-muted-foreground">
             Order reference: {id.slice(0, 8)}

@@ -19,6 +19,8 @@ export type AdminOrder = {
   payment_status: string;
   order_status: string;
   proof_url: string | null;
+  payment_method: string;
+  advance_amount: number;
 };
 
 export async function assertAdmin(context: { supabase: { rpc: unknown }; userId: string }) {
@@ -74,6 +76,8 @@ export const listOrders = createServerFn({ method: "GET" })
           payment_status: row.payment_status,
           order_status: row.order_status,
           proof_url: proofUrl,
+          payment_method: row.payment_method ?? "cod",
+          advance_amount: Number(row.advance_amount ?? row.delivery_fee ?? 0),
         };
       }),
     );
@@ -133,10 +137,12 @@ export const ensureAdminAccount = createServerFn({ method: "POST" }).handler(asy
     await supabaseAdmin.auth.admin.updateUserById(userId, { password });
   }
 
-  await supabaseAdmin.from("user_roles").upsert(
-    { user_id: userId, role: "admin" },
-    { onConflict: "user_id,role", ignoreDuplicates: true },
-  );
+  await supabaseAdmin
+    .from("user_roles")
+    .upsert(
+      { user_id: userId, role: "admin" },
+      { onConflict: "user_id,role", ignoreDuplicates: true },
+    );
 
   return { ok: true as const, reason: "ready" as const };
 });

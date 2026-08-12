@@ -19,6 +19,7 @@ const orderInput = z.object({
   city: z.string(),
   notes: z.string().optional().default(""),
   advanceReference: z.string(),
+  paymentMethod: z.enum(["cod", "full", "ceo"]).optional().default("cod"),
   items: z
     .array(z.object({ productId: z.string().min(1).max(120), size: z.string().max(60).optional() }))
     .min(1)
@@ -56,7 +57,7 @@ export const placeOrder = createServerFn({ method: "POST" })
       return {
         ok: false,
         error: "invalid",
-        message: "Please enter the NayaPay transaction ID for the Rs 350 advance.",
+        message: "Please enter the NayaPay transaction ID / reference for your advance payment.",
       };
     }
 
@@ -68,7 +69,8 @@ export const placeOrder = createServerFn({ method: "POST" })
       if (binary.byteLength > 4_000_000) {
         return { ok: false, error: "invalid", message: "Screenshot must be smaller than 4 MB." };
       }
-      const ext = data.proof.type === "image/png" ? "png" : data.proof.type === "image/webp" ? "webp" : "jpg";
+      const ext =
+        data.proof.type === "image/png" ? "png" : data.proof.type === "image/webp" ? "webp" : "jpg";
       const key = `${crypto.randomUUID()}.${ext}`;
       const { error: uploadError } = await supabaseAdmin.storage
         .from("payment-proofs")
@@ -88,6 +90,7 @@ export const placeOrder = createServerFn({ method: "POST" })
       p_notes: notes,
       p_items: data.items.map((i) => ({ product_id: i.productId, size: i.size ?? "" })),
       p_advance_reference: advanceReference,
+      p_payment_method: data.paymentMethod,
       ...(proofPath ? { p_payment_proof_url: proofPath } : {}),
     });
 
@@ -119,16 +122,20 @@ export const placeOrder = createServerFn({ method: "POST" })
       .join(", ");
 
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbwXOpwTwrTjNDRdJY9OAPPB9LtN9_M-qw_EvQ1SfGL4kAsBxRS-aYgB2KbVEnZiz5E8/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          name: customerName,
-          phone,
-          items: itemsSummary,
-          address: `${address}, ${city}`,
-          notes: notes || "—",
-        }),
-      });
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbwXOpwTwrTjNDRdJY9OAPPB9LtN9_M-qw_EvQ1SfGL4kAsBxRS-aYgB2KbVEnZiz5E8/exec",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            name: customerName,
+            phone,
+            items: itemsSummary,
+            address: `${address}, ${city}`,
+            notes: notes || "—",
+            paymentMethod: data.paymentMethod,
+          }),
+        },
+      );
     } catch (err) {
       console.error("Order notification failed:", err);
     }

@@ -17,6 +17,7 @@ export type Database = {
       orders: {
         Row: {
           address: string
+          advance_amount: number
           advance_paid: boolean
           advance_reference: string | null
           city: string
@@ -27,6 +28,7 @@ export type Database = {
           items: Json
           notes: string | null
           order_status: string
+          payment_method: string
           payment_proof_url: string | null
           payment_status: string
           phone: string
@@ -35,6 +37,7 @@ export type Database = {
         }
         Insert: {
           address: string
+          advance_amount?: number
           advance_paid?: boolean
           advance_reference?: string | null
           city: string
@@ -45,6 +48,7 @@ export type Database = {
           items?: Json
           notes?: string | null
           order_status?: string
+          payment_method?: string
           payment_proof_url?: string | null
           payment_status?: string
           phone: string
@@ -53,6 +57,7 @@ export type Database = {
         }
         Update: {
           address?: string
+          advance_amount?: number
           advance_paid?: boolean
           advance_reference?: string | null
           city?: string
@@ -63,6 +68,7 @@ export type Database = {
           items?: Json
           notes?: string | null
           order_status?: string
+          payment_method?: string
           payment_proof_url?: string | null
           payment_status?: string
           phone?: string
@@ -164,6 +170,7 @@ export type Database = {
           p_customer_name: string
           p_items: Json
           p_notes: string
+          p_payment_method?: string
           p_payment_proof_url?: string
           p_phone: string
         }
