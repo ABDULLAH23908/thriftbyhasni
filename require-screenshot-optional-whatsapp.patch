@@ -1,0 +1,100 @@
+diff --git a/src/lib/orders.functions.ts b/src/lib/orders.functions.ts
+index 3dfefca..5c66a73 100644
+--- a/src/lib/orders.functions.ts
++++ b/src/lib/orders.functions.ts
+@@ -11,7 +11,6 @@ const proofSchema = z
+   })
+   .nullable()
+   .optional();
+-
+ const orderInput = z.object({
+   customerName: z.string(),
+   phone: z.string(),
+@@ -60,6 +59,13 @@ export const placeOrder = createServerFn({ method: "POST" })
+         message: "Please enter the NayaPay transaction ID / reference for your advance payment.",
+       };
+     }
++    if (!data.proof || data.proof.base64.length === 0) {
++      return {
++        ok: false,
++        error: "invalid",
++        message: "Please attach a screenshot of your NayaPay payment to confirm your order.",
++      };
++    }
+ 
+     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+ 
+diff --git a/src/routes/checkout.tsx b/src/routes/checkout.tsx
+index 7bb5ae4..3a41d0b 100644
+--- a/src/routes/checkout.tsx
++++ b/src/routes/checkout.tsx
+@@ -96,6 +96,10 @@ function Checkout() {
+   async function handleSubmit(e: React.FormEvent) {
+     e.preventDefault();
+     if (available.length === 0) return;
++    if (!proof) {
++      setMessage("Please attach a screenshot of your NayaPay payment to confirm your order.");
++      return;
++    }
+     setBusy(true);
+     setMessage("");
+ 
+@@ -159,8 +163,6 @@ function Checkout() {
+         } catch {
+           /* storage unavailable */
+         }
+-        // Opened inside the submit gesture so the browser doesn't block it.
+-        window.open(waUrl, "_blank", "noopener,noreferrer");
+         clearCart();
+         navigate({
+           to: "/order-received",
+@@ -445,15 +447,19 @@ function Checkout() {
+                     htmlFor="proof"
+                     className="text-[11px] font-bold uppercase tracking-widest"
+                   >
+-                    Payment screenshot (optional)
++                    Payment screenshot
+                   </label>
+                   <input
+                     id="proof"
+                     type="file"
++                    required
+                     accept="image/jpeg,image/png,image/webp"
+                     onChange={(e) => setProof(e.target.files?.[0] ?? null)}
+                     className="mt-1 w-full border border-border bg-card px-3 py-2 text-xs"
+                   />
++                  <p className="mt-1 text-[11px] text-muted-foreground">
++                    Required — a screenshot of your NayaPay transfer confirms your order.
++                  </p>
+                 </div>
+ 
+                 {message && <p className="text-xs font-semibold text-destructive">{message}</p>}
+diff --git a/src/routes/order-received.tsx b/src/routes/order-received.tsx
+index 7e162ea..d6be12e 100644
+--- a/src/routes/order-received.tsx
++++ b/src/routes/order-received.tsx
+@@ -67,11 +67,11 @@ function OrderReceived() {
+           </p>
+         )}
+         {waUrl && (
+-          <div className="mt-8 border border-border bg-secondary/40 p-5">
+-            <p className="text-xs font-bold uppercase tracking-[0.2em]">Confirm on WhatsApp</p>
++          <div className="mt-8 border-2 border-brand bg-secondary/40 p-5">
++            <p className="text-xs font-bold uppercase tracking-[0.2em]">One last step</p>
+             <p className="mt-2 text-xs text-muted-foreground">
+-              A WhatsApp chat with your order details should have opened. If it didn&apos;t, tap
+-              below and press send.
++              Tap below to send us your order details on WhatsApp — this is how we confirm your
++              payment and get your order moving.
+             </p>
+             <a
+               href={waUrl}
+@@ -79,7 +79,7 @@ function OrderReceived() {
+               rel="noreferrer"
+               className="mt-4 inline-block bg-highlight px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-highlight-foreground"
+             >
+-              Send order details
++              Send order details on WhatsApp
+             </a>
+           </div>
+         )}

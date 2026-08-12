@@ -67,11 +67,11 @@ function OrderReceived() {
           </p>
         )}
         {waUrl && (
-          <div className="mt-8 border border-border bg-secondary/40 p-5">
-            <p className="text-xs font-bold uppercase tracking-[0.2em]">Confirm on WhatsApp</p>
+          <div className="mt-8 border-2 border-brand bg-secondary/40 p-5">
+            <p className="text-xs font-bold uppercase tracking-[0.2em]">One last step</p>
             <p className="mt-2 text-xs text-muted-foreground">
-              A WhatsApp chat with your order details should have opened. If it didn&apos;t, tap
-              below and press send.
+              Tap below to send us your order details on WhatsApp — this is how we confirm your
+              payment and get your order moving.
             </p>
             <a
               href={waUrl}
@@ -79,7 +79,7 @@ function OrderReceived() {
               rel="noreferrer"
               className="mt-4 inline-block bg-highlight px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-highlight-foreground"
             >
-              Send order details
+              Send order details on WhatsApp
             </a>
           </div>
         )}

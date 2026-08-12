@@ -96,6 +96,10 @@ function Checkout() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (available.length === 0) return;
+    if (!proof) {
+      setMessage("Please attach a screenshot of your NayaPay payment to confirm your order.");
+      return;
+    }
     setBusy(true);
     setMessage("");
 
@@ -159,8 +163,6 @@ function Checkout() {
         } catch {
           /* storage unavailable */
         }
-        // Opened inside the submit gesture so the browser doesn't block it.
-        window.open(waUrl, "_blank", "noopener,noreferrer");
         clearCart();
         navigate({
           to: "/order-received",
@@ -445,15 +447,19 @@ function Checkout() {
                     htmlFor="proof"
                     className="text-[11px] font-bold uppercase tracking-widest"
                   >
-                    Payment screenshot (optional)
+                    Payment screenshot
                   </label>
                   <input
                     id="proof"
                     type="file"
+                    required
                     accept="image/jpeg,image/png,image/webp"
                     onChange={(e) => setProof(e.target.files?.[0] ?? null)}
                     className="mt-1 w-full border border-border bg-card px-3 py-2 text-xs"
                   />
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Required — a screenshot of your NayaPay transfer confirms your order.
+                  </p>
                 </div>
 
                 {message && <p className="text-xs font-semibold text-destructive">{message}</p>}

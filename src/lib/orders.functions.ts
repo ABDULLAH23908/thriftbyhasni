@@ -11,7 +11,6 @@ const proofSchema = z
   })
   .nullable()
   .optional();
-
 const orderInput = z.object({
   customerName: z.string(),
   phone: z.string(),
@@ -58,6 +57,13 @@ export const placeOrder = createServerFn({ method: "POST" })
         ok: false,
         error: "invalid",
         message: "Please enter the NayaPay transaction ID / reference for your advance payment.",
+      };
+    }
+    if (!data.proof || data.proof.base64.length === 0) {
+      return {
+        ok: false,
+        error: "invalid",
+        message: "Please attach a screenshot of your NayaPay payment to confirm your order.",
       };
     }
 
