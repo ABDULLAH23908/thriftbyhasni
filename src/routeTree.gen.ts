@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as OrderReceivedRouteImport } from './routes/order-received'
+import { Route as PoliciesRouteImport } from './routes/policies'
 import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -44,6 +45,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const OrderReceivedRoute = OrderReceivedRouteImport.update({
   id: '/order-received',
   path: '/order-received',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewsRoute = ReviewsRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/order-received': typeof OrderReceivedRoute
+  '/policies': typeof PoliciesRoute
   '/reviews': typeof ReviewsRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/order-received': typeof OrderReceivedRoute
+  '/policies': typeof PoliciesRoute
   '/reviews': typeof ReviewsRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/order-received': typeof OrderReceivedRoute
+  '/policies': typeof PoliciesRoute
   '/reviews': typeof ReviewsRoute
   '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/order-received'
+    | '/policies'
     | '/reviews'
     | '/shop'
     | '/sitemap.xml'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/order-received'
+    | '/policies'
     | '/reviews'
     | '/shop'
     | '/sitemap.xml'
@@ -159,6 +170,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/order-received'
+    | '/policies'
     | '/reviews'
     | '/shop'
     | '/sitemap.xml'
@@ -174,6 +186,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   OrderReceivedRoute: typeof OrderReceivedRoute
+  PoliciesRoute: typeof PoliciesRoute
   ReviewsRoute: typeof ReviewsRoute
   ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/order-received'
       fullPath: '/order-received'
       preLoaderRoute: typeof OrderReceivedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reviews': {
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   OrderReceivedRoute: OrderReceivedRoute,
+  PoliciesRoute: PoliciesRoute,
   ReviewsRoute: ReviewsRoute,
   ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 import { store, brands } from "@/data/products";
 
@@ -47,11 +48,22 @@ export function SiteFooter() {
                 Instagram
               </a>
             </li>
+            <li>
+              <Link to="/policies" className="underline">
+                Terms &amp; Refund Policy
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
       <div className="border-t border-highlight-foreground/15 py-5 text-center text-xs">
-        © {new Date().getFullYear()} {store.name}. All rights reserved.
+        <span>
+          © {new Date().getFullYear()} {store.name}. All rights reserved.
+        </span>
+        <span className="mx-2">·</span>
+        <Link to="/policies" className="underline">
+          Terms &amp; Refund Policy
+        </Link>
       </div>
     </footer>
   );
